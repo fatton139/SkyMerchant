@@ -1,1 +1,16 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
+
+.logo-container {
+    width: 100%;
+    height: 64px;
+    padding: 10px;
+    .logo {
+        width: inherit;
+        height: 100%;
+        background-color: lightblue;
+    }
+}
+
+.main-header {
+    background-color: #f0f2f5;
+}

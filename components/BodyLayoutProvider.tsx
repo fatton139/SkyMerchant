@@ -15,13 +15,15 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 collapsed={menuCollapsed}
                 onCollapse={setMenuCollapsed}
             >
-                <div className="logo" />
+                <div className="logo-container">
+                    <div className="logo"/>
+                </div>
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
                     <Menu.Item>Home</Menu.Item>
                 </Menu>
             </Layout.Sider>
             <Layout>
-                <Layout.Header>Header</Layout.Header>
+                <Layout.Header className="main-header">Header</Layout.Header>
                 <Layout.Content>{props.children}</Layout.Content>
                 <Layout.Footer>
                     <Breadcrumb>
