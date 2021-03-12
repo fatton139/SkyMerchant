@@ -28,7 +28,13 @@ export const BodyLayoutProvider: React.FunctionComponent<
             </Layout.Sider>
             <Layout>
                 <Layout.Header className={styles.header}>Header</Layout.Header>
-                <Layout.Content>{props.children}</Layout.Content>
+                <Layout.Content
+                    style={{
+                        padding: 24,
+                    }}
+                >
+                    {props.children}
+                </Layout.Content>
                 <Layout.Footer>
                     <NavBreadcrumb currentPath={router.pathname} />
                 </Layout.Footer>
