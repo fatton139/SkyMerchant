@@ -1,12 +1,13 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
+import { BodyLayoutProvider } from "./BodyLayoutProvider";
 
 type Props = {
     children?: ReactNode;
     title?: string;
 };
 
-const PageLayout = ({
+export const PageLayout = ({
     children,
     title = "This is the default title",
 }: Props) => (
@@ -22,12 +23,8 @@ const PageLayout = ({
         <header>
             <nav></nav>
         </header>
-        <body></body>
-        <footer>
-            <hr />
-            <span>I'm here to stay (Footer)</span>
-        </footer>
+        <body>
+            <BodyLayoutProvider>{children}</BodyLayoutProvider>
+        </body>
     </div>
 );
-
-export default PageLayout;
