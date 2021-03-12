@@ -19,16 +19,16 @@ const links: Link[] = [
     },
 ];
 
-type Props = {};
+type Props = {
+    currentPath: string;
+};
 
-export const NavMenu: React.FunctionComponent<Props> = () => {
-    const router = useRouter();
-
+export const NavMenu: React.FunctionComponent<Props> = (props: Props) => {
     return (
         <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={[router.pathname]}
+            defaultSelectedKeys={[props.currentPath]}
         >
             {links.map((link) => {
                 return (

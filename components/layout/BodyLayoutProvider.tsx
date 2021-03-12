@@ -1,6 +1,8 @@
-import { Breadcrumb, Layout } from "antd";
+import { Layout } from "antd";
+import { useRouter } from "next/router";
 import React, { PropsWithChildren } from "react";
 import styles from "../../styles/Layout.module.scss";
+import { NavBreadcrumb } from "./NavBreadcrumb";
 import { NavMenu } from "./NavMenu";
 
 type Props = {};
@@ -8,6 +10,8 @@ type Props = {};
 export const BodyLayoutProvider: React.FunctionComponent<
     PropsWithChildren<Props>
 > = (props: PropsWithChildren<Props>) => {
+    const router = useRouter();
+
     const [menuCollapsed, setMenuCollapsed] = React.useState<boolean>(false);
 
     return (
@@ -20,16 +24,13 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 <div className={styles["logo-container"]}>
                     <div className={styles.logo} />
                 </div>
-                <NavMenu />
+                <NavMenu currentPath={router.pathname} />
             </Layout.Sider>
             <Layout>
                 <Layout.Header className={styles.header}>Header</Layout.Header>
                 <Layout.Content>{props.children}</Layout.Content>
                 <Layout.Footer>
-                    <Breadcrumb>
-                        <Breadcrumb.Item>Fishing Simulator</Breadcrumb.Item>
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                    </Breadcrumb>
+                    <NavBreadcrumb currentPath={router.pathname} />
                 </Layout.Footer>
             </Layout>
         </Layout>
