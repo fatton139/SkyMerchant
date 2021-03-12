@@ -19,7 +19,7 @@ export const BodyLayoutProvider: React.FunctionComponent<
                     <div className="logo"/>
                 </div>
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-                    <Menu.Item>Home</Menu.Item>
+                    <Menu.Item key="1">Home</Menu.Item>
                 </Menu>
             </Layout.Sider>
             <Layout>
