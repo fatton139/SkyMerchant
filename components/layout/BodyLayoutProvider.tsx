@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { Layout, Menu, Breadcrumb } from "antd";
+import Link from "next/link";
 
 type Props = {};
 
@@ -16,10 +17,11 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 onCollapse={setMenuCollapsed}
             >
                 <div className="logo-container">
-                    <div className="logo"/>
+                    <div className="logo" />
                 </div>
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-                    <Menu.Item key="1">Home</Menu.Item>
+                    <Menu.Item key="1"><Link href="/">Home</Link></Menu.Item>
+                    <Menu.Item key="2"><Link href="/test">Test</Link></Menu.Item>
                 </Menu>
             </Layout.Sider>
             <Layout>
