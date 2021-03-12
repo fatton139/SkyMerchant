@@ -1,7 +1,11 @@
+import "antd/dist/antd.css";
 import React from "react";
+import { PageLayout } from "../components/layout";
 
-const Home = () => {
-    return <div>home</div>;
+export const App = () => {
+    return (
+        <PageLayout title="Fishing Simulator">{/* <Component /> */}</PageLayout>
+    );
 };
 
-export default Home;
+export default App;

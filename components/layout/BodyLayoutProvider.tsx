@@ -1,6 +1,7 @@
+import { Breadcrumb, Layout } from "antd";
 import React, { PropsWithChildren } from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
-import Link from "next/link";
+import styles from "../../styles/Layout.module.scss";
+import { NavMenu } from "./NavMenu";
 
 type Props = {};
 
@@ -16,16 +17,13 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 collapsed={menuCollapsed}
                 onCollapse={setMenuCollapsed}
             >
-                <div className="logo-container">
-                    <div className="logo" />
+                <div className={styles["logo-container"]}>
+                    <div className={styles.logo} />
                 </div>
-                <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-                    <Menu.Item key="1"><Link href="/">Home</Link></Menu.Item>
-                    <Menu.Item key="2"><Link href="/test">Test</Link></Menu.Item>
-                </Menu>
+                <NavMenu />
             </Layout.Sider>
             <Layout>
-                <Layout.Header className="main-header">Header</Layout.Header>
+                <Layout.Header className={styles.header}>Header</Layout.Header>
                 <Layout.Content>{props.children}</Layout.Content>
                 <Layout.Footer>
                     <Breadcrumb>

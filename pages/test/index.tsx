@@ -1,11 +1,15 @@
-import React from 'react'
+import { AppProps } from "next/dist/next-server/lib/router/router";
+import React from "react";
+import { PageLayout } from "../../components/layout";
+import "antd/dist/antd.css";
+// import "../styles/home.module.scss";
 
-const Test = () => {
+export const App = () => {
     return (
-        <div>
-            test
-        </div>
-    )
-}
+        <PageLayout title="Fishing Simulator">
+            {/* <Component /> */}
+        </PageLayout>
+    );
+};
 
-export default Test;
+export default App;
