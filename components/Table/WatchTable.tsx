@@ -340,6 +340,7 @@ export const WatchTable: React.FunctionComponent = () => {
                         <Button
                             icon={<ReloadOutlined />}
                             onClick={revalidate}
+                            loading={isValidating}
                         />
                     </Space>
                     <Space>
