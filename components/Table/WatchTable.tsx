@@ -71,17 +71,20 @@ const getTagColourFromCategory = (
     }
 };
 
-export const WatchTable: React.FunctionComponent = () => {
+type Props = {
+    setWatchingRecords: (records: number[]) => void;
+    setWatchModalVisible: (value: boolean) => void;
+    auctions: AuctionRecord[] | undefined;
+    revalidate: () => Promise<boolean>;
+    isValidating: boolean;
+};
+
+export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
     const [selectedRowKeys, setSelectedRowKeys] = React.useState<React.Key[]>(
         []
     );
     const [searchText, setSearchText] = React.useState<string>("");
     const [showCountdown, setShowCountdown] = React.useState<boolean>(false);
-
-    const { data, error, revalidate, isValidating } = useSWR<AuctionResponse>(
-        "https://run.mocky.io/v3/9fc59513-2562-4a57-b135-73c5d4d086ed",
-        postFetcher
-    );
 
     const columns = React.useMemo(() => {
         return [
@@ -327,7 +330,7 @@ export const WatchTable: React.FunctionComponent = () => {
         ];
     }, [searchText, showCountdown]);
 
-    if (!data) {
+    if (!props.auctions) {
         return <Skeleton active />;
     }
 
@@ -339,13 +342,25 @@ export const WatchTable: React.FunctionComponent = () => {
                         <Button
                             type="primary"
                             disabled={selectedRowKeys.length === 0}
+                            onClick={() => {
+                                props.setWatchingRecords([]);
+                                props.setWatchModalVisible(true);
+                            }}
                         >
                             Watch
                         </Button>
                         <Button
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={() => {
+                                setSelectedRowKeys([]);
+                            }}
+                        >
+                            Clear {selectedRowKeys.length} selection
+                        </Button>
+                        <Button
                             icon={<ReloadOutlined />}
-                            onClick={revalidate}
-                            loading={isValidating}
+                            onClick={props.revalidate}
+                            loading={props.isValidating}
                         />
                     </Space>
                     <Space>
@@ -362,7 +377,7 @@ export const WatchTable: React.FunctionComponent = () => {
                     </Space>
                 </Row>
                 <Table
-                    loading={isValidating}
+                    loading={props.isValidating}
                     expandable={{
                         rowExpandable: () => true,
                         expandedRowRender: (record: AuctionRecord) => (
@@ -370,7 +385,7 @@ export const WatchTable: React.FunctionComponent = () => {
                         ),
                     }}
                     columns={columns}
-                    dataSource={data.auctions}
+                    dataSource={props.auctions}
                     rowSelection={{
                         selectedRowKeys,
                         onChange: setSelectedRowKeys,
