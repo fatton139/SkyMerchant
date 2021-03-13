@@ -1,13 +1,12 @@
 import { AppstoreAddOutlined } from "@ant-design/icons";
-import { Button, Divider, Dropdown, Menu, Space } from "antd";
+import { Button, Divider, message } from "antd";
 import produce, { enableMapSet } from "immer";
+import * as ls from "local-storage";
 import React from "react";
 import useSWR from "swr";
+import { v4 as uuidv4 } from "uuid";
 import { AuctionResponse, PersistedWatchlists } from "../../interfaces";
 import { postFetcher } from "../../utils/fetcher";
-import { v4 as uuidv4 } from "uuid";
-import { WatchTable } from "../Table";
-import * as ls from "local-storage";
 import { Watchlist } from "../Table/Watchlist";
 
 enableMapSet();
@@ -50,6 +49,7 @@ export const WatchView = () => {
         } else {
             ls.set("watchlists", { [key]: {} });
         }
+        message.success("New watchlist has been added")
     };
 
     const deleteWatchlist = (key: string) => {
@@ -76,7 +76,6 @@ export const WatchView = () => {
                     <Watchlist
                         auctions={data?.auctions}
                         revalidate={revalidate}
-                        isValidating={isValidating}
                         id={key}
                         key={key}
                         deleteWatchlist={deleteWatchlist}

@@ -2,6 +2,7 @@ import {
     ClockCircleOutlined,
     ReloadOutlined,
     SearchOutlined,
+    ClearOutlined,
 } from "@ant-design/icons";
 import {
     Button,
@@ -72,15 +73,16 @@ const getTagColourFromCategory = (
 };
 
 type Props = {
-    setWatchingRecords?: (records: number[]) => void;
-    setWatchModalVisible?: (value: boolean) => void;
     auctions: AuctionRecord[] | undefined;
-    revalidate: () => Promise<boolean>;
     isValidating: boolean;
     additionalButtons?: React.ReactNode;
     pagination?: TablePaginationConfig;
     filters?: Record<string, FilterValue | null>;
     sorters?: SorterResult<AuctionRecord>;
+    setWatchingRecords?: (records: number[]) => void;
+    setWatchModalVisible?: (value: boolean) => void;
+    clearFilters: () => void;
+    revalidate: () => Promise<void>;
     onTableChange?: (
         pagination: TablePaginationConfig,
         filters: Record<string, FilterValue | null>,
@@ -392,12 +394,18 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                             </>
                         )}
                         <Button
+                            icon={<ClearOutlined />}
+                            onClick={props.clearFilters}
+                        >
+                            Clear all filters
+                        </Button>
+                    </Space>
+                    <Space>
+                        <Button
                             icon={<ReloadOutlined />}
                             onClick={props.revalidate}
                             loading={props.isValidating}
                         />
-                    </Space>
-                    <Space>
                         <Button
                             icon={<ClockCircleOutlined />}
                             onClick={() => {
