@@ -78,7 +78,7 @@ export const WatchTable: React.FunctionComponent = () => {
     const [searchText, setSearchText] = React.useState<string>("");
     const [showCountdown, setShowCountdown] = React.useState<boolean>(false);
 
-    const { data, error } = useSWR<AuctionResponse>(
+    const { data, error, revalidate, isValidating } = useSWR<AuctionResponse>(
         "https://run.mocky.io/v3/9fc59513-2562-4a57-b135-73c5d4d086ed",
         postFetcher
     );
@@ -327,8 +327,6 @@ export const WatchTable: React.FunctionComponent = () => {
         ];
     }, [searchText, showCountdown]);
 
-    console.log(data, error);
-
     if (!data) {
         return <Skeleton active />;
     }
@@ -339,7 +337,10 @@ export const WatchTable: React.FunctionComponent = () => {
                 <Row justify={"space-between"}>
                     <Space>
                         <Button type="primary">Watch</Button>
-                        <Button icon={<ReloadOutlined />} />
+                        <Button
+                            icon={<ReloadOutlined />}
+                            onClick={revalidate}
+                        />
                     </Space>
                     <Space>
                         <Button
@@ -355,6 +356,7 @@ export const WatchTable: React.FunctionComponent = () => {
                     </Space>
                 </Row>
                 <Table
+                    loading={isValidating}
                     expandable={{
                         rowExpandable: () => true,
                         expandedRowRender: (record: AuctionRecord) => (
