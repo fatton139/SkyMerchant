@@ -1,6 +1,5 @@
 import { Menu } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
 
 type Link = {
@@ -14,8 +13,8 @@ const links: Link[] = [
         path: "/",
     },
     {
-        name: "Test",
-        path: "/test",
+        name: "Watchlist",
+        path: "/watchlist",
     },
 ];
 

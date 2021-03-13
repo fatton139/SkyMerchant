@@ -1,14 +1,14 @@
+import "antd/dist/antd.css";
 import React from "react";
 import { PageLayout } from "../../components/layout";
-import "antd/dist/antd.css";
-// import "../styles/home.module.scss";
+import { WatchView } from "../../components/views";
 
-export const App = () => {
+export const Page = () => {
     return (
         <PageLayout title="Fishing Simulator">
-            {/* <Component /> */}
+            <WatchView />
         </PageLayout>
     );
 };
 
-export default App;
+export default Page;

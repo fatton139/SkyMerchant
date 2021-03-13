@@ -1,27 +1,27 @@
 import {
+    ClockCircleOutlined,
     ReloadOutlined,
     SearchOutlined,
-    ClockCircleOutlined,
 } from "@ant-design/icons";
 import {
     Button,
     Input,
+    Row,
     Skeleton,
     Space,
+    Statistic,
     Table,
+    TablePaginationConfig,
     Tag,
     Tooltip,
-    Statistic,
-    Row,
 } from "antd";
-import React from "react";
-import Highlighter from "react-highlight-words";
-import useSWR from "swr";
-import { AuctionRecord, AuctionResponse } from "../../interfaces";
-import { postFetcher } from "../../utils/fetcher";
+import { FilterValue, SorterResult } from "antd/lib/table/interface";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import React from "react";
+import Highlighter from "react-highlight-words";
 import ReactTimeAgo from "react-time-ago";
+import { AuctionRecord } from "../../interfaces";
 
 TimeAgo.addLocale(en);
 
@@ -72,18 +72,29 @@ const getTagColourFromCategory = (
 };
 
 type Props = {
-    setWatchingRecords: (records: number[]) => void;
-    setWatchModalVisible: (value: boolean) => void;
+    setWatchingRecords?: (records: number[]) => void;
+    setWatchModalVisible?: (value: boolean) => void;
     auctions: AuctionRecord[] | undefined;
     revalidate: () => Promise<boolean>;
     isValidating: boolean;
+    additionalButtons?: React.ReactNode;
+    pagination?: TablePaginationConfig;
+    filters?: Record<string, FilterValue | null>;
+    sorters?: SorterResult<AuctionRecord>;
+    onTableChange?: (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<AuctionRecord> | SorterResult<AuctionRecord>[]
+    ) => void;
 };
 
 export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
     const [selectedRowKeys, setSelectedRowKeys] = React.useState<React.Key[]>(
         []
     );
-    const [searchText, setSearchText] = React.useState<string>("");
+    const [searchText, setSearchText] = React.useState<string>(
+        props.filters?.["name"]?.[0].toString() || ""
+    );
     const [showCountdown, setShowCountdown] = React.useState<boolean>(false);
 
     const columns = React.useMemo(() => {
@@ -91,6 +102,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
             {
                 title: "Type",
                 dataIndex: "bin",
+                key: "bin",
                 render: (value: boolean) => (
                     <div>{value ? "Buy Instantly" : "Auction"}</div>
                 ),
@@ -104,6 +116,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         value: false,
                     },
                 ],
+                filteredValue: props.filters?.["bin"] || null,
                 onFilter: (
                     value: string | number | boolean,
                     record: AuctionRecord
@@ -126,8 +139,13 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         />
                     </a>
                 ),
+                sortOrder:
+                    (props.sorters?.columnKey === "name" &&
+                        props.sorters.order) ||
+                    undefined,
                 sorter: (a: AuctionRecord, b: AuctionRecord) =>
                     a["item_name"].localeCompare(b["item_name"]),
+                filteredValue: props.filters?.["name"] || null,
                 filterIcon: (filtered: boolean) => (
                     <SearchOutlined
                         style={{ color: filtered ? "#1890ff" : undefined }}
@@ -201,12 +219,17 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                 dataIndex: "highest_bid_amount",
                 key: "bid",
                 render: (text: string) => <p style={{ margin: 0 }}>{text}</p>,
+                sortOrder:
+                    (props.sorters?.columnKey === "bid" &&
+                        props.sorters.order) ||
+                    undefined,
                 sorter: (a: AuctionRecord, b: AuctionRecord) =>
                     b["highest_bid_amount"] - a["highest_bid_amount"],
             },
             {
                 title: "Ending",
                 dataIndex: "end",
+                key: "end",
                 render: (value: number) => {
                     const date = new Date(value);
                     return (
@@ -226,12 +249,17 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         </Tooltip>
                     );
                 },
+                sortOrder:
+                    (props.sorters?.columnKey === "end" &&
+                        props.sorters.order) ||
+                    undefined,
                 sorter: (a: AuctionRecord, b: AuctionRecord) =>
                     b["end"] - a["end"],
                 filters: [
                     { text: "Ended", value: true },
                     { text: "Active", value: false },
                 ],
+                filteredValue: props.filters?.["end"] || null,
                 onFilter: (
                     value: string | number | boolean,
                     record: AuctionRecord
@@ -281,6 +309,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         value: "VERY SPECIAL",
                     },
                 ],
+                filteredValue: props.filters?.["tier"] || null,
                 onFilter: (
                     value: string | number | boolean,
                     record: AuctionRecord
@@ -305,15 +334,15 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         value: "armor",
                     },
                     {
-                        text: "ACCESSORIES",
+                        text: "ACCESSORY",
                         value: "accessories",
                     },
                     {
-                        text: "CONSUMABLES",
+                        text: "CONSUMABLE",
                         value: "consumables",
                     },
                     {
-                        text: "BLOCKS",
+                        text: "BLOCK",
                         value: "blocks",
                     },
 
@@ -322,13 +351,14 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         value: "misc",
                     },
                 ],
+                filteredValue: props.filters?.["category"] || null,
                 onFilter: (
                     value: string | number | boolean,
                     record: AuctionRecord
                 ) => record.category === value,
             },
         ];
-    }, [searchText, showCountdown]);
+    }, [searchText, showCountdown, props.filters]);
 
     if (!props.auctions) {
         return <Skeleton active />;
@@ -339,24 +369,28 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
             <Space direction="vertical" style={{ width: "100%" }}>
                 <Row justify={"space-between"}>
                     <Space>
-                        <Button
-                            type="primary"
-                            disabled={selectedRowKeys.length === 0}
-                            onClick={() => {
-                                props.setWatchingRecords([]);
-                                props.setWatchModalVisible(true);
-                            }}
-                        >
-                            Watch
-                        </Button>
-                        <Button
-                            disabled={selectedRowKeys.length === 0}
-                            onClick={() => {
-                                setSelectedRowKeys([]);
-                            }}
-                        >
-                            Clear {selectedRowKeys.length} selection
-                        </Button>
+                        {props.setWatchingRecords && (
+                            <>
+                                <Button
+                                    type="primary"
+                                    disabled={selectedRowKeys.length === 0}
+                                    onClick={() => {
+                                        props.setWatchingRecords?.([]);
+                                        props.setWatchModalVisible?.(true);
+                                    }}
+                                >
+                                    Watch
+                                </Button>
+                                <Button
+                                    disabled={selectedRowKeys.length === 0}
+                                    onClick={() => {
+                                        setSelectedRowKeys([]);
+                                    }}
+                                >
+                                    Clear {selectedRowKeys.length} selection
+                                </Button>
+                            </>
+                        )}
                         <Button
                             icon={<ReloadOutlined />}
                             onClick={props.revalidate}
@@ -374,10 +408,10 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         >{`${
                             showCountdown ? "Hide" : "Show"
                         } countdown`}</Button>
+                        {props.additionalButtons}
                     </Space>
                 </Row>
                 <Table
-                    loading={props.isValidating}
                     expandable={{
                         rowExpandable: () => true,
                         expandedRowRender: (record: AuctionRecord) => (
@@ -386,10 +420,14 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                     }}
                     columns={columns}
                     dataSource={props.auctions}
-                    rowSelection={{
-                        selectedRowKeys,
-                        onChange: setSelectedRowKeys,
-                    }}
+                    rowSelection={
+                        props.setWatchingRecords && {
+                            selectedRowKeys,
+                            onChange: setSelectedRowKeys,
+                        }
+                    }
+                    onChange={props.onTableChange}
+                    pagination={props.pagination}
                 />
             </Space>
         </>

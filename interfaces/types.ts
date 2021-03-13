@@ -1,3 +1,6 @@
+import { TablePaginationConfig } from "antd";
+import { FilterValue, SorterResult } from "antd/lib/table/interface";
+
 export type AuctionRecord = {
     key: number;
     bin: boolean;
@@ -26,4 +29,14 @@ export type AuctionRecord = {
         | "SPECIAL"
         | "VERY SPECIAL";
     uuid: string;
+};
+
+export type PersistedWatchlistData = {
+    pagination: TablePaginationConfig;
+    filters: Record<string, FilterValue | null>;
+    sorters: SorterResult<AuctionRecord>;
+};
+
+export type PersistedWatchlists = {
+    [key: string]: PersistedWatchlistData;
 };

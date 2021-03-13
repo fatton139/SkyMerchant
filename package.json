@@ -11,6 +11,8 @@
   "dependencies": {
     "antd": "^4.13.1",
     "axios": "^0.21.1",
+    "immer": "^8.0.1",
+    "local-storage": "^2.0.0",
     "next": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -18,7 +20,8 @@
     "react-time-ago": "^6.2.2",
     "react-use-localstorage": "^3.5.3",
     "sass": "^1.32.8",
-    "swr": "^0.5.2"
+    "swr": "^0.5.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/javascript-time-ago": "^2.0.2",
@@ -26,6 +29,7 @@
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "@types/react-highlight-words": "^0.16.1",
+    "@types/uuid": "^8.3.0",
     "prettier": "^2.2.1",
     "typescript": "4.0"
   },

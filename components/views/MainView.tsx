@@ -1,8 +1,8 @@
 import Modal from "antd/lib/modal/Modal";
 import React from "react";
 import useSWR from "swr";
-import { AuctionRecord, AuctionResponse } from "../../interfaces";
-import { postFetcher } from "../../utils/fetcher";
+import { AuctionResponse } from "../../interfaces";
+import { getFetcher } from "../../utils/fetcher";
 import { WatchTable } from "../Table";
 
 export const MainView: React.FunctionComponent = () => {
@@ -12,8 +12,8 @@ export const MainView: React.FunctionComponent = () => {
     );
 
     const { data, error, revalidate, isValidating } = useSWR<AuctionResponse>(
-        "https://run.mocky.io/v3/9fc59513-2562-4a57-b135-73c5d4d086ed",
-        postFetcher
+        "https://192.168.0.103:44358/api/Auctions",
+        getFetcher
     );
 
     return (
