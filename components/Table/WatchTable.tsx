@@ -336,7 +336,12 @@ export const WatchTable: React.FunctionComponent = () => {
             <Space direction="vertical" style={{ width: "100%" }}>
                 <Row justify={"space-between"}>
                     <Space>
-                        <Button type="primary">Watch</Button>
+                        <Button
+                            type="primary"
+                            disabled={selectedRowKeys.length === 0}
+                        >
+                            Watch
+                        </Button>
                         <Button
                             icon={<ReloadOutlined />}
                             onClick={revalidate}

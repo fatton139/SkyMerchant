@@ -1,12 +1,12 @@
 import "antd/dist/antd.css";
 import React from "react";
 import { PageLayout } from "../components/layout";
-import { WatchTable } from "../components/Table";
+import { MainView } from "../components/views";
 
 export const App = () => {
     return (
         <PageLayout title="Fishing Simulator">
-            <WatchTable />
+            <MainView />
         </PageLayout>
     );
 };
