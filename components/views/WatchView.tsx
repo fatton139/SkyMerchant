@@ -13,7 +13,6 @@ import {
 import produce, { enableMapSet } from "immer";
 import * as ls from "local-storage";
 import React from "react";
-import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
 import {
     AuctionRecord,
@@ -21,7 +20,6 @@ import {
     PersistedWatchlists,
     WatchList,
 } from "../../interfaces";
-import { postFetcher } from "../utils/fetcher";
 import {
     LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY,
     LOCAL_STORAGE_WATCHLIST_KEY,
@@ -34,10 +32,11 @@ enableMapSet();
 type Props = {
     data?: AuctionResponse;
     revalidate: () => Promise<boolean>;
+    isValidating: boolean;
 };
 
 export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
-    const { data, revalidate } = props;
+    const { data, revalidate, isValidating } = props;
 
     const [watchlists, setWatchlists] = React.useState<Map<string, WatchList>>(
         new Map()
@@ -226,6 +225,7 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                                 extra={settingsControl()}
                             >
                                 <Watchlist
+                                    isValidating={props.isValidating}
                                     auctions={data?.auctions}
                                     revalidate={revalidate}
                                     id={key}

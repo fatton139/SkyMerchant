@@ -5,14 +5,15 @@ import { useRepeatingSWR } from "../hooks";
 type Props = {
     children: (
         data: AuctionResponse | undefined,
-        revlidate: () => Promise<boolean>
+        revlidate: () => Promise<boolean>,
+        isValidating: boolean,
     ) => React.ReactNode;
 };
 
 export const AuctionDataProvider: React.FunctionComponent<Props> = (
     props: Props
 ) => {
-    const { data, revalidate } = useRepeatingSWR();
+    const { data, revalidate, isValidating } = useRepeatingSWR();
 
-    return <>{props.children(data, revalidate)}</>;
+    return <>{props.children(data, revalidate, isValidating)}</>;
 };

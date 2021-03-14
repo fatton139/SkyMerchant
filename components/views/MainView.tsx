@@ -7,6 +7,7 @@ import { WatchTable } from "../table";
 type Props = {
     data?: AuctionResponse;
     revalidate: () => Promise<boolean>;
+    isValidating: boolean;
 };
 
 export const MainView: React.FunctionComponent<Props> = (props: Props) => {
@@ -37,7 +38,7 @@ export const MainView: React.FunctionComponent<Props> = (props: Props) => {
                 setWatchModalVisible={setWatchModalVisible}
                 auctions={data?.auctions}
                 revalidate={revalidateWrapper}
-                isValidating={isValidating}
+                isValidating={isValidating || props.isValidating}
                 pagination={pagination}
                 filters={filters}
                 sorters={sorters}

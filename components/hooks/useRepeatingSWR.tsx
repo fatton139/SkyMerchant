@@ -1,18 +1,19 @@
 import React from "react";
 import useSWR from "swr";
 import { AuctionResponse, AUCTION_ENDPOINT } from "../../interfaces";
-import { postFetcher } from "../utils/fetcher";
 import { REVALIDATION_INTERVAL_SECONDS } from "../consts";
+import { getFetcher } from "../utils/fetcher";
 
 export const useRepeatingSWR = (
     refreshIntervalSeconds: number = REVALIDATION_INTERVAL_SECONDS
 ): {
     data?: AuctionResponse;
     revalidate: () => Promise<boolean>;
+    isValidating: boolean;
 } => {
-    const { data, revalidate } = useSWR<AuctionResponse>(
+    const { data, revalidate, isValidating } = useSWR<AuctionResponse>(
         AUCTION_ENDPOINT,
-        postFetcher
+        getFetcher
     );
 
     React.useEffect(() => {
@@ -24,5 +25,5 @@ export const useRepeatingSWR = (
         };
     }, []);
 
-    return { data, revalidate };
+    return { data, revalidate, isValidating };
 };

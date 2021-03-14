@@ -12,6 +12,7 @@ type Props = {
     auctions: AuctionRecord[] | undefined;
     id: string;
     alertIfAbovePrice?: number;
+    isValidating: boolean;
     revalidate: () => Promise<boolean>;
     deleteWatchlist: () => void;
     openSettingsModal: () => void;
@@ -74,7 +75,7 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                 {...forwardProps}
                 auctions={showOnlyMatching ? getMatchingRecords() : auctions}
                 revalidate={revalidateWrapper}
-                isValidating={isValidating}
+                isValidating={isValidating || props.isValidating}
                 additionalButtons={
                     <>
                         <Button

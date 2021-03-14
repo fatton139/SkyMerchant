@@ -26,7 +26,7 @@ export const TagStatus: React.FunctionComponent<Props> = (props: Props) => {
     }, []);
 
     if (isOperational === undefined) {
-        return <Tag icon={<SyncOutlined />}>Checking API status</Tag>;
+        return <Tag icon={<SyncOutlined spin />}>Checking API status</Tag>;
     } else if (!isOperational) {
         return <Tag color="red">API Status - Inactive</Tag>;
     } else {
