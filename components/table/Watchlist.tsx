@@ -1,9 +1,4 @@
-import {
-    Badge,
-    Button,
-    Popconfirm,
-    TablePaginationConfig,
-} from "antd";
+import { Badge, Button, Popconfirm, TablePaginationConfig } from "antd";
 import React from "react";
 import { AuctionRecord, PersistedWatchlists } from "../../interfaces";
 import { WatchTable } from ".";
@@ -11,6 +6,7 @@ import * as ls from "local-storage";
 import { FilterValue, SorterResult } from "antd/lib/table/interface";
 import { DeleteRowOutlined, SettingOutlined } from "@ant-design/icons";
 import { updateWatchlistLocalstorage } from "../utils";
+import { LOCAL_STORAGE_WATCHLIST_KEY } from "../consts";
 
 type Props = {
     auctions: AuctionRecord[] | undefined;
@@ -41,7 +37,9 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
     const [isValidating, setIsValidating] = React.useState(false);
 
     const persisted = React.useMemo(() => {
-        return (ls.get("watchlists") as PersistedWatchlists | undefined)?.[id];
+        return (ls.get(LOCAL_STORAGE_WATCHLIST_KEY) as
+            | PersistedWatchlists
+            | undefined)?.[id];
     }, []);
 
     const revalidateWrapper = async () => {

@@ -6,7 +6,6 @@ import {
     Empty,
     message,
     Popconfirm,
-    Row,
     Space,
     Tag,
     Typography,
@@ -22,7 +21,11 @@ import {
     WatchList,
 } from "../../interfaces";
 import { postFetcher } from "../../utils/fetcher";
-import { WatchlistSettingsModal, Watchlist } from "../table";
+import {
+    LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY,
+    LOCAL_STORAGE_WATCHLIST_KEY,
+} from "../consts";
+import { Watchlist, WatchlistSettingsModal } from "../table";
 import { updateWatchlistLocalstorage } from "../utils";
 
 enableMapSet();
@@ -41,7 +44,7 @@ export const WatchView = () => {
     const [activePanelKeys, setActivePanelKeys] = React.useState<string[]>([]);
 
     React.useEffect(() => {
-        const persisted = ls.get("watchlists") as
+        const persisted = ls.get(LOCAL_STORAGE_WATCHLIST_KEY) as
             | PersistedWatchlists
             | undefined;
         if (persisted) {
@@ -55,9 +58,9 @@ export const WatchView = () => {
                     });
                 })
             );
-            const persistedActivePanels = ls.get("expandedwatchlists") as
-                | string[]
-                | undefined;
+            const persistedActivePanels = ls.get(
+                LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY
+            ) as string[] | undefined;
             if (persistedActivePanels) {
                 setActivePanelKeys(
                     persistedActivePanels.filter((k) =>
@@ -89,15 +92,16 @@ export const WatchView = () => {
                 draft.delete(key);
             })
         );
-        const existing = ls.get("watchlists") as
+        const existing = ls.get(LOCAL_STORAGE_WATCHLIST_KEY) as
             | PersistedWatchlists
             | undefined;
         const name = existing?.[key].name;
         delete existing?.[key];
-        ls.set("watchlists", existing);
-        const activePanels = (ls.get("expandedwatchlists") as string[]) || [];
+        ls.set(LOCAL_STORAGE_WATCHLIST_KEY, existing);
+        const activePanels =
+            (ls.get(LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY) as string[]) || [];
         ls.set(
-            "expandedwatchlists",
+            LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY,
             activePanels.filter((k) => Object.keys(existing || {}).includes(k))
         );
         message.success(`Successfully deleted ${name}`);
@@ -106,8 +110,8 @@ export const WatchView = () => {
     const deleteAllWatchlists = () => {
         setWatchlists(new Map());
         setActivePanelKeys([]);
-        ls.set("watchlists", {});
-        ls.set("expandedwatchlists", []);
+        ls.set(LOCAL_STORAGE_WATCHLIST_KEY, {});
+        ls.set(LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY, []);
     };
 
     const settingsControl = React.useCallback(() => {
@@ -183,7 +187,7 @@ export const WatchView = () => {
                             Array.from(watchlists.keys()).includes(k)
                         );
                         setActivePanelKeys(filtered);
-                        ls.set("expandedwatchlists", filtered);
+                        ls.set(LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY, filtered);
                     }}
                 >
                     {Array.from(watchlists.entries()).map(([key, value]) => {

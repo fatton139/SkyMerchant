@@ -1,5 +1,6 @@
 import * as ls from "local-storage";
 import { PersistedWatchlistData, PersistedWatchlists } from "../../interfaces";
+import { LOCAL_STORAGE_WATCHLIST_KEY } from "../consts";
 
 export const updateWatchlistLocalstorage = <
     T extends PersistedWatchlistData,
@@ -9,9 +10,11 @@ export const updateWatchlistLocalstorage = <
     objectKey: K,
     value: T[K]
 ) => {
-    const existing = ls.get("watchlists") as PersistedWatchlists | undefined;
+    const existing = ls.get(LOCAL_STORAGE_WATCHLIST_KEY) as
+        | PersistedWatchlists
+        | undefined;
     if (existing) {
-        ls.set("watchlists", {
+        ls.set(LOCAL_STORAGE_WATCHLIST_KEY, {
             ...existing,
             [key]: {
                 ...existing[key],
@@ -19,7 +22,7 @@ export const updateWatchlistLocalstorage = <
             },
         });
     } else {
-        ls.set("watchlists", {
+        ls.set(LOCAL_STORAGE_WATCHLIST_KEY, {
             [key]: {
                 [objectKey]: value,
             },
