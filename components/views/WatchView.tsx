@@ -20,8 +20,7 @@ import {
     WatchList,
 } from "../../interfaces";
 import { postFetcher } from "../../utils/fetcher";
-import { WatchlistSettingsModal } from "../Table";
-import { Watchlist } from "../Table/Watchlist";
+import { WatchlistSettingsModal, Watchlist } from "../table";
 
 enableMapSet();
 
