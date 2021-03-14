@@ -31,7 +31,12 @@ export type AuctionRecord = {
     uuid: string;
 };
 
-export type PersistedWatchlistData = {
+export type WatchList = {
+    name: string;
+    alertIfAbovePrice: number | undefined;
+};
+
+export type PersistedWatchlistData = WatchList & {
     pagination: TablePaginationConfig;
     filters: Record<string, FilterValue | null>;
     sorters: SorterResult<AuctionRecord>;

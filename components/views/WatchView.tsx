@@ -1,17 +1,29 @@
 import { AppstoreAddOutlined } from "@ant-design/icons";
-import { Button, Collapse, Divider, message } from "antd";
+import {
+    Button,
+    Collapse,
+    Divider,
+    message,
+    Row,
+    Space,
+    Tag,
+    Typography,
+} from "antd";
 import produce, { enableMapSet } from "immer";
 import * as ls from "local-storage";
 import React from "react";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
-import { AuctionResponse, PersistedWatchlists } from "../../interfaces";
+import {
+    AuctionResponse,
+    PersistedWatchlists,
+    WatchList,
+} from "../../interfaces";
 import { postFetcher } from "../../utils/fetcher";
+import { WatchlistSettingsModal } from "../Table";
 import { Watchlist } from "../Table/Watchlist";
 
 enableMapSet();
-
-type WatchList = {};
 
 export const WatchView = () => {
     const { data, error, revalidate, isValidating } = useSWR<AuctionResponse>(
@@ -23,31 +35,54 @@ export const WatchView = () => {
         new Map()
     );
 
+    const [modalData, setModalData] = React.useState<string | undefined>();
+
     React.useEffect(() => {
         const persisted = ls.get("watchlists") as
             | PersistedWatchlists
             | undefined;
         if (persisted) {
             setWatchlists(
-                new Map(Object.keys(persisted).map((key) => [key, {}]))
+                new Map(
+                    Object.keys(persisted).map((key) => [
+                        key,
+                        {
+                            name: persisted[key].name,
+                            alertIfAbovePrice: persisted[key].alertIfAbovePrice,
+                        },
+                    ])
+                )
             );
         }
     }, []);
 
     const insertWatchlist = () => {
         const key = uuidv4();
+        const defaultName = "New watchlist";
         setWatchlists(
             produce(watchlists, (draft) => {
-                draft.set(key, {});
+                draft.set(key, {
+                    name: defaultName,
+                    alertIfAbovePrice: undefined,
+                });
             })
         );
         const existing = ls.get("watchlists") as
             | PersistedWatchlists
             | undefined;
         if (existing) {
-            ls.set("watchlists", { ...existing, [key]: {} });
+            ls.set("watchlists", {
+                ...existing,
+                [key]: {
+                    name: defaultName,
+                },
+            });
         } else {
-            ls.set("watchlists", { [key]: {} });
+            ls.set("watchlists", {
+                [key]: {
+                    name: defaultName,
+                },
+            });
         }
         message.success("New watchlist has been added");
     };
@@ -69,8 +104,41 @@ export const WatchView = () => {
         return <AppstoreAddOutlined />;
     }, []);
 
+    const generatePanelHeader = React.useCallback(
+        (watchlist: WatchList) => {
+            if (watchlist.alertIfAbovePrice !== undefined) {
+                return (
+                    <Space>
+                        <Typography.Text
+                            style={{
+                                display: "inline",
+                            }}
+                        >
+                            {watchlist.name}
+                        </Typography.Text>
+                        <Tag color="green">{`Alert if above ${watchlist.alertIfAbovePrice}`}</Tag>
+                    </Space>
+                );
+            } else {
+                return (
+                    <Space>
+                        <Typography.Text
+                            style={{
+                                display: "inline",
+                            }}
+                        >
+                            {watchlist.name}
+                        </Typography.Text>
+                        <Tag>No alerts setup</Tag>
+                    </Space>
+                );
+            }
+        },
+        [watchlists]
+    );
+
     return (
-        <div>
+        <>
             <Button
                 type="primary"
                 icon={<AppstoreAddOutlined />}
@@ -92,19 +160,30 @@ export const WatchView = () => {
                     return (
                         <Collapse.Panel
                             key={key}
-                            header="New watchlist"
+                            header={generatePanelHeader(value)}
                             extra={settingsControl()}
                         >
                             <Watchlist
                                 auctions={data?.auctions}
                                 revalidate={revalidate}
                                 id={key}
-                                deleteWatchlist={deleteWatchlist}
+                                deleteWatchlist={() => {
+                                    deleteWatchlist(key);
+                                }}
+                                openSettingsModal={() => {
+                                    setModalData(key);
+                                }}
                             />
                         </Collapse.Panel>
                     );
                 })}
             </Collapse>
-        </div>
+            <WatchlistSettingsModal
+                modalData={modalData}
+                closeModal={() => setModalData(undefined)}
+                watchlists={watchlists}
+                setWatchlists={setWatchlists}
+            />
+        </>
     );
 };
