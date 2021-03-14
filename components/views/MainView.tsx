@@ -18,7 +18,7 @@ export const MainView: React.FunctionComponent<Props> = (props: Props) => {
         Record<string, FilterValue | null>
     >({});
     const [sorters, setSorters] = React.useState<SorterResult<AuctionRecord>>();
-    const [watchingRecords, setWatchingRecords] = React.useState<number[]>([]);
+    const [, setWatchingRecords] = React.useState<number[]>([]);
     const [watchModalVisible, setWatchModalVisible] = React.useState<boolean>(
         false
     );

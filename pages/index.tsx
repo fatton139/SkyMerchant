@@ -5,7 +5,7 @@ import { MainView } from "../components/views";
 
 const App = () => {
     return (
-        <PageLayout title="Fishing Simulator">
+        <PageLayout title="Sky Merchant">
             <AuctionDataProvider>
                 {(data, revalidate) => {
                     return <MainView data={data} revalidate={revalidate} />;

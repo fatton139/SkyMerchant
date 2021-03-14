@@ -21,7 +21,7 @@ import {
     PersistedWatchlists,
     WatchList,
 } from "../../interfaces";
-import { postFetcher } from "../../utils/fetcher";
+import { postFetcher } from "../utils/fetcher";
 import {
     LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY,
     LOCAL_STORAGE_WATCHLIST_KEY,
@@ -37,10 +37,7 @@ type Props = {
 };
 
 export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
-    const { data, revalidate } = useSWR<AuctionResponse>(
-        "https://run.mocky.io/v3/cf4e8467-5355-49da-b2a6-69625d0f2883",
-        postFetcher
-    );
+    const { data, revalidate } = props;
 
     const [watchlists, setWatchlists] = React.useState<Map<string, WatchList>>(
         new Map()

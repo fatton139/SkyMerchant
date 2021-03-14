@@ -8,7 +8,7 @@ type Props = {
 export const NavBreadcrumb: React.FunctionComponent<Props> = (props: Props) => {
     return (
         <Breadcrumb>
-            <Breadcrumb.Item>Fishing Simulator</Breadcrumb.Item>
+            <Breadcrumb.Item>Sky Merchant</Breadcrumb.Item>
             {props.currentPath.split("/").map((crumb) => {
                 return <Breadcrumb.Item key={crumb}>{crumb}</Breadcrumb.Item>;
             })}

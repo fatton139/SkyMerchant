@@ -1,7 +1,7 @@
 import { SyncOutlined } from "@ant-design/icons";
 import { Tag } from "antd";
 import React from "react";
-import { getFetcher } from "../../utils/fetcher";
+import { getFetcher } from "../utils/fetcher";
 
 type Props = {
     endpoint: string;

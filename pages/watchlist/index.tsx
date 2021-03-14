@@ -5,7 +5,7 @@ import { WatchView } from "../../components/views";
 
 const Page = () => {
     return (
-        <PageLayout title="Fishing Simulator">
+        <PageLayout title="Sky Merchant | Watchlist">
             <AuctionDataProvider>
                 {(data, revalidate) => {
                     return <WatchView data={data} revalidate={revalidate} />;

@@ -28,7 +28,7 @@ import React from "react";
 import ReactTimeAgo from "react-time-ago";
 import { AuctionRecord } from "../../interfaces";
 import styles from "../../styles/Table.module.scss";
-import { collectFilterStates, getFilterData } from "../utils/antd";
+import { collectFilterStates, getFilterData } from "../utils";
 
 TimeAgo.addLocale(en);
 

@@ -4,7 +4,7 @@ import { PageLayout } from "../../components/layout";
 
 export const Page = () => {
     return (
-        <PageLayout title="Fishing Simulator">
+        <PageLayout title="Sky Merchant | Items Database">
             <p>Coming soon...</p>
         </PageLayout>
     );

@@ -108,7 +108,7 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                 filters={filters}
                 sorters={sorters}
                 clearFilters={clearAllFilters}
-                onTableChange={(pagination, filters, sorters, extra) => {
+                onTableChange={(pagination, filters, sorters) => {
                     setPagination(pagination);
                     setFilters(filters);
                     setSorters(sorters as SorterResult<AuctionRecord>);
