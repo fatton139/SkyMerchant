@@ -4,6 +4,7 @@ import {
     Collapse,
     Divider,
     message,
+    Popconfirm,
     Row,
     Space,
     Tag,
@@ -140,13 +141,28 @@ export const WatchView = () => {
 
     return (
         <>
-            <Button
-                type="primary"
-                icon={<AppstoreAddOutlined />}
-                onClick={insertWatchlist}
-            >
-                New Watchlist
-            </Button>
+            <Space>
+                <Button
+                    type="primary"
+                    icon={<AppstoreAddOutlined />}
+                    onClick={insertWatchlist}
+                >
+                    New Watchlist
+                </Button>
+                <Popconfirm
+                    title="Are you sure you want to delete ALL watchlists?"
+                    onConfirm={() => {
+                        setWatchlists(new Map());
+                        setActivePanelKeys([]);
+                        ls.set("watchlists", {});
+                        ls.set("expandedwatchlists", []);
+                    }}
+                >
+                    <Button danger icon={<AppstoreAddOutlined />}>
+                        Delete All
+                    </Button>
+                </Popconfirm>
+            </Space>
             <Divider orientation="left">Your Watchlists</Divider>
             <Collapse
                 expandIconPosition="right"
