@@ -23,6 +23,7 @@ import React from "react";
 import Highlighter from "react-highlight-words";
 import ReactTimeAgo from "react-time-ago";
 import { AuctionRecord } from "../../interfaces";
+import styles from "../../styles/Table.module.scss";
 
 TimeAgo.addLocale(en);
 
@@ -79,6 +80,7 @@ type Props = {
     pagination?: TablePaginationConfig;
     filters?: Record<string, FilterValue | null>;
     sorters?: SorterResult<AuctionRecord>;
+    alertIfAbovePrice?: number;
     setWatchingRecords?: (records: number[]) => void;
     setWatchModalVisible?: (value: boolean) => void;
     clearFilters: () => void;
@@ -126,7 +128,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
             },
             {
                 title: "Name",
-                dataIndex: "item_name",
+                dataIndex: "itemName",
                 key: "name",
                 render: (text: string) => (
                     <a>
@@ -146,7 +148,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         props.sorters.order) ||
                     undefined,
                 sorter: (a: AuctionRecord, b: AuctionRecord) =>
-                    a["item_name"].localeCompare(b["item_name"]),
+                    a.itemName.localeCompare(b.itemName),
                 filteredValue: props.filters?.["name"] || null,
                 filterIcon: (filtered: boolean) => (
                     <SearchOutlined
@@ -157,7 +159,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                     value: string | number | boolean,
                     record: AuctionRecord
                 ) =>
-                    record["item_name"]
+                    record.itemName
                         .toString()
                         .toLowerCase()
                         .includes(value.toString().toLowerCase()),
@@ -218,15 +220,14 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
             },
             {
                 title: "Bid",
-                dataIndex: "highest_bid_amount",
+                dataIndex: "bid",
                 key: "bid",
                 render: (text: string) => <p style={{ margin: 0 }}>{text}</p>,
                 sortOrder:
                     (props.sorters?.columnKey === "bid" &&
                         props.sorters.order) ||
                     undefined,
-                sorter: (a: AuctionRecord, b: AuctionRecord) =>
-                    b["highest_bid_amount"] - a["highest_bid_amount"],
+                sorter: (a: AuctionRecord, b: AuctionRecord) => b.bid - a.bid,
             },
             {
                 title: "Ending",
@@ -423,7 +424,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                     expandable={{
                         rowExpandable: () => true,
                         expandedRowRender: (record: AuctionRecord) => (
-                            <div>{record["item_lore"]}</div>
+                            <div>{record.itemLore}</div>
                         ),
                     }}
                     columns={columns}
@@ -434,6 +435,15 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                             onChange: setSelectedRowKeys,
                         }
                     }
+                    rowClassName={(record) => {
+                        if (
+                            props.alertIfAbovePrice &&
+                            props.alertIfAbovePrice > record.bid
+                        ) {
+                            return styles["row-alert"];
+                        }
+                        return "";
+                    }}
                     onChange={props.onTableChange}
                     pagination={props.pagination}
                 />

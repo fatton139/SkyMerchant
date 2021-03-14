@@ -26,7 +26,7 @@ enableMapSet();
 
 export const WatchView = () => {
     const { data, error, revalidate, isValidating } = useSWR<AuctionResponse>(
-        "https://run.mocky.io/v3/9fc59513-2562-4a57-b135-73c5d4d086ed",
+        "https://run.mocky.io/v3/cf4e8467-5355-49da-b2a6-69625d0f2883",
         postFetcher
     );
 

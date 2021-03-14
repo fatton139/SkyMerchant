@@ -2,7 +2,7 @@ import { TablePaginationConfig } from "antd";
 import { FilterValue, SorterResult } from "antd/lib/table/interface";
 
 export type AuctionRecord = {
-    key: number;
+    key: string;
     bin: boolean;
     start: number;
     end: number;
@@ -15,10 +15,12 @@ export type AuctionRecord = {
         | "blocks"
         | "misc";
     claimed: boolean;
-    highest_bid_amount: number;
+    highestBidAmount: number;
+    startingBid: number;
     id: number;
-    item_lore: string;
-    item_name: string;
+    itemLore: string;
+    itemName: string;
+    bid: number;
     tier:
         | "COMMON"
         | "UNCOMMON"
