@@ -1,5 +1,5 @@
 import { AppstoreAddOutlined } from "@ant-design/icons";
-import { Button, Divider, message } from "antd";
+import { Button, Collapse, Divider, message } from "antd";
 import produce, { enableMapSet } from "immer";
 import * as ls from "local-storage";
 import React from "react";
@@ -65,6 +65,10 @@ export const WatchView = () => {
         ls.set("watchlists", existing);
     };
 
+    const settingsControl = React.useCallback(() => {
+        return <AppstoreAddOutlined />;
+    }, []);
+
     return (
         <div>
             <Button
@@ -74,18 +78,33 @@ export const WatchView = () => {
             >
                 New Watchlist
             </Button>
-            <Divider orientation="left">Your Watchlists</Divider>
-            {Array.from(watchlists.entries()).map(([key, value]) => {
-                return (
-                    <Watchlist
-                        auctions={data?.auctions}
-                        revalidate={revalidate}
-                        id={key}
-                        key={key}
-                        deleteWatchlist={deleteWatchlist}
-                    />
-                );
-            })}
+            <Divider orientation="left">Your watchlists</Divider>
+            <Collapse
+                expandIconPosition="right"
+                defaultActiveKey={[
+                    ...((ls.get("expandedwatchlists") as any) || []),
+                ]}
+                onChange={(keys) => {
+                    ls.set("expandedwatchlists", keys);
+                }}
+            >
+                {Array.from(watchlists.entries()).map(([key, value]) => {
+                    return (
+                        <Collapse.Panel
+                            key={key}
+                            header="New watchlist"
+                            extra={settingsControl()}
+                        >
+                            <Watchlist
+                                auctions={data?.auctions}
+                                revalidate={revalidate}
+                                id={key}
+                                deleteWatchlist={deleteWatchlist}
+                            />
+                        </Collapse.Panel>
+                    );
+                })}
+            </Collapse>
         </div>
     );
 };

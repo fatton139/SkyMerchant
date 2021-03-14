@@ -1,4 +1,4 @@
-import { Button, Popconfirm, TablePaginationConfig } from "antd";
+import { Button, Divider, Popconfirm, TablePaginationConfig } from "antd";
 import React from "react";
 import { AuctionRecord, PersistedWatchlists } from "../../interfaces";
 import { WatchTable } from ".";
@@ -43,6 +43,7 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
     }, [persisted]);
 
     return (
+        <>
         <WatchTable
             {...forwardProps}
             revalidate={revalidateWrapper}
@@ -89,5 +90,6 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                 }
             }}
         />
+        </>
     );
 };
