@@ -15,6 +15,7 @@ type Props = {
     revalidate: () => Promise<boolean>;
     deleteWatchlist: () => void;
     openSettingsModal: () => void;
+    getMatchingRecords: () => AuctionRecord[];
 };
 
 export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
@@ -23,8 +24,14 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
         deleteWatchlist,
         revalidate,
         openSettingsModal,
+        auctions,
+        getMatchingRecords,
         ...forwardProps
     } = props;
+
+    const [showOnlyMatching, setShowOnlyMatching] = React.useState<boolean>(
+        false
+    );
 
     const [pagination, setPagination] = React.useState<TablePaginationConfig>(
         {}
@@ -58,10 +65,17 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
         <>
             <WatchTable
                 {...forwardProps}
+                auctions={showOnlyMatching ? getMatchingRecords() : auctions}
                 revalidate={revalidateWrapper}
                 isValidating={isValidating}
                 additionalButtons={
                     <>
+                        <Button
+                            icon={<SettingOutlined />}
+                            onClick={() => setShowOnlyMatching((prev) => !prev)}
+                        >
+                            {`Show ${showOnlyMatching ? "all" : "matched"}`}
+                        </Button>
                         <Badge dot={props.alertIfAbovePrice === undefined}>
                             <Button
                                 icon={<SettingOutlined />}

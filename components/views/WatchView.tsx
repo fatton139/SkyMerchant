@@ -123,8 +123,17 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
         return <AppstoreAddOutlined />;
     }, []);
 
+    const getMatchingRecords = React.useCallback((watchlist: WatchList) => {
+        return watchlist.alertIfAbovePrice !== undefined
+            ? data?.auctions.filter((record) => {
+                  return record.bid > watchlist.alertIfAbovePrice!;
+              })
+            : undefined;
+    }, []);
+
     const generatePanelHeader = React.useCallback(
         (watchlist: WatchList) => {
+            const matchingLength = getMatchingRecords(watchlist)?.length;
             if (watchlist.alertIfAbovePrice !== undefined) {
                 return (
                     <Space>
@@ -136,6 +145,9 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                             {watchlist.name}
                         </Typography.Text>
                         <Tag color="green">{`Alert if above ${watchlist.alertIfAbovePrice}`}</Tag>
+                        {matchingLength && matchingLength > 0 ? (
+                            <Tag color="blue">{`${matchingLength} Matches`}</Tag>
+                        ) : undefined}
                     </Space>
                 );
             } else {
@@ -153,7 +165,7 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                 );
             }
         },
-        [watchlists]
+        [watchlists, props.data]
     );
 
     return (
@@ -213,6 +225,9 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                                     openSettingsModal={() => {
                                         setModalData(key);
                                     }}
+                                    getMatchingRecords={() =>
+                                        getMatchingRecords(value) || []
+                                    }
                                 />
                             </Collapse.Panel>
                         );
