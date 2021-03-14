@@ -65,7 +65,7 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                 isValidating={isValidating}
                 additionalButtons={
                     <>
-                        <Badge dot>
+                        <Badge dot={props.alertIfAbovePrice === undefined}>
                             <Button
                                 icon={<SettingOutlined />}
                                 onClick={openSettingsModal}
