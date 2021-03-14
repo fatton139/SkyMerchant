@@ -3,6 +3,7 @@ import {
     Button,
     Collapse,
     Divider,
+    Empty,
     message,
     Popconfirm,
     Row,
@@ -102,6 +103,13 @@ export const WatchView = () => {
         message.success(`Successfully deleted ${name}`);
     };
 
+    const deleteAllWatchlists = () => {
+        setWatchlists(new Map());
+        setActivePanelKeys([]);
+        ls.set("watchlists", {});
+        ls.set("expandedwatchlists", []);
+    };
+
     const settingsControl = React.useCallback(() => {
         return <AppstoreAddOutlined />;
     }, []);
@@ -151,12 +159,7 @@ export const WatchView = () => {
                 </Button>
                 <Popconfirm
                     title="Are you sure you want to delete ALL watchlists?"
-                    onConfirm={() => {
-                        setWatchlists(new Map());
-                        setActivePanelKeys([]);
-                        ls.set("watchlists", {});
-                        ls.set("expandedwatchlists", []);
-                    }}
+                    onConfirm={deleteAllWatchlists}
                 >
                     <Button danger icon={<AppstoreAddOutlined />}>
                         Delete All
@@ -164,41 +167,50 @@ export const WatchView = () => {
                 </Popconfirm>
             </Space>
             <Divider orientation="left">Your Watchlists</Divider>
-            <Collapse
-                expandIconPosition="right"
-                activeKey={activePanelKeys}
-                onChange={(keys) => {
-                    const active = typeof keys === "string" ? [keys] : keys;
-                    const filtered = active.filter((k) =>
-                        Array.from(watchlists.keys()).includes(k)
-                    );
-                    setActivePanelKeys(filtered);
-                    ls.set("expandedwatchlists", filtered);
-                }}
-            >
-                {Array.from(watchlists.entries()).map(([key, value]) => {
-                    return (
-                        <Collapse.Panel
-                            key={key}
-                            header={generatePanelHeader(value)}
-                            extra={settingsControl()}
-                        >
-                            <Watchlist
-                                auctions={data?.auctions}
-                                revalidate={revalidate}
-                                id={key}
-                                alertIfAbovePrice={value.alertIfAbovePrice}
-                                deleteWatchlist={() => {
-                                    deleteWatchlist(key);
-                                }}
-                                openSettingsModal={() => {
-                                    setModalData(key);
-                                }}
-                            />
-                        </Collapse.Panel>
-                    );
-                })}
-            </Collapse>
+            {watchlists.size === 0 ? (
+                <Empty description="No Watchlists">
+                    <Button type="primary" onClick={insertWatchlist}>
+                        Create New Watchlist
+                    </Button>
+                </Empty>
+            ) : (
+                <Collapse
+                    expandIconPosition="right"
+                    activeKey={activePanelKeys}
+                    onChange={(keys) => {
+                        const active = typeof keys === "string" ? [keys] : keys;
+                        const filtered = active.filter((k) =>
+                            Array.from(watchlists.keys()).includes(k)
+                        );
+                        setActivePanelKeys(filtered);
+                        ls.set("expandedwatchlists", filtered);
+                    }}
+                >
+                    {Array.from(watchlists.entries()).map(([key, value]) => {
+                        return (
+                            <Collapse.Panel
+                                key={key}
+                                header={generatePanelHeader(value)}
+                                extra={settingsControl()}
+                            >
+                                <Watchlist
+                                    auctions={data?.auctions}
+                                    revalidate={revalidate}
+                                    id={key}
+                                    alertIfAbovePrice={value.alertIfAbovePrice}
+                                    deleteWatchlist={() => {
+                                        deleteWatchlist(key);
+                                    }}
+                                    openSettingsModal={() => {
+                                        setModalData(key);
+                                    }}
+                                />
+                            </Collapse.Panel>
+                        );
+                    })}
+                </Collapse>
+            )}
+
             <WatchlistSettingsModal
                 modalData={modalData}
                 closeModal={() => setModalData(undefined)}
