@@ -1,9 +1,9 @@
 import * as ls from "local-storage";
-import { PersistedWatchlists, WatchList } from "../../interfaces";
+import { PersistedWatchlistData, PersistedWatchlists } from "../../interfaces";
 
 export const updateWatchlistLocalstorage = <
-    T extends WatchList,
-    K extends keyof WatchList
+    T extends PersistedWatchlistData,
+    K extends keyof PersistedWatchlistData
 >(
     key: string,
     objectKey: K,

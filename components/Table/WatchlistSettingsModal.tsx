@@ -1,7 +1,7 @@
 import { Form, Input, Modal } from "antd";
 import produce from "immer";
 import React from "react";
-import { WatchList } from "../../interfaces";
+import { PersistedWatchlistData, WatchList } from "../../interfaces";
 import { updateWatchlistLocalstorage } from "../utils";
 
 type Props = {
@@ -11,7 +11,10 @@ type Props = {
     closeModal: () => void;
 };
 
-const updateWatchlistProp = <T extends WatchList, K extends keyof WatchList>(
+const updateWatchlistProp = <
+    T extends PersistedWatchlistData,
+    K extends keyof PersistedWatchlistData
+>(
     watchlists: Map<string, WatchList>,
     key: string,
     objectKey: K,
