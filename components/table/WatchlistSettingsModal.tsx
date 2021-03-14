@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import produce from "immer";
 import React from "react";
 import { PersistedWatchlistData, WatchList } from "../../interfaces";
@@ -84,6 +84,22 @@ export const WatchlistSettingsModal: React.FunctionComponent<Props> = (
                             );
                         }}
                     />
+                </Form.Item>
+                <Form.Item>
+                    <Button
+                        onClick={() => {
+                            props.setWatchlists(
+                                updateWatchlistProp(
+                                    props.watchlists,
+                                    props.modalData!,
+                                    "alertIfAbovePrice",
+                                    undefined
+                                )
+                            );
+                        }}
+                    >
+                        Remove Alert
+                    </Button>
                 </Form.Item>
             </Form>
         </Modal>
