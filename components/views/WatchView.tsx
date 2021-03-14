@@ -30,8 +30,13 @@ import { updateWatchlistLocalstorage } from "../utils";
 
 enableMapSet();
 
-export const WatchView = () => {
-    const { data, error, revalidate, isValidating } = useSWR<AuctionResponse>(
+type Props = {
+    data?: AuctionResponse;
+    revalidate: () => Promise<boolean>;
+};
+
+export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
+    const { data, revalidate } = useSWR<AuctionResponse>(
         "https://run.mocky.io/v3/cf4e8467-5355-49da-b2a6-69625d0f2883",
         postFetcher
     );

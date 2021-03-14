@@ -1,12 +1,16 @@
 import "antd/dist/antd.css";
 import React from "react";
-import { PageLayout } from "../components/layout";
+import { AuctionDataProvider, PageLayout } from "../components/layout";
 import { MainView } from "../components/views";
 
 export const App = () => {
     return (
         <PageLayout title="Fishing Simulator">
-            <MainView />
+            <AuctionDataProvider>
+                {(data, revalidate) => {
+                    return <MainView data={data} revalidate={revalidate} />;
+                }}
+            </AuctionDataProvider>
         </PageLayout>
     );
 };

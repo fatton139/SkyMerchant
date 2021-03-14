@@ -1,20 +1,34 @@
-import Modal from "antd/lib/modal/Modal";
+import { Modal, TablePaginationConfig } from "antd";
+import { FilterValue, SorterResult } from "antd/lib/table/interface";
 import React from "react";
-import useSWR from "swr";
-import { AuctionResponse } from "../../interfaces";
-import { getFetcher } from "../../utils/fetcher";
-import { WatchTable } from "../Table";
+import { AuctionRecord, AuctionResponse } from "../../interfaces";
+import { WatchTable } from "../table";
 
-export const MainView: React.FunctionComponent = () => {
+type Props = {
+    data?: AuctionResponse;
+    revalidate: () => Promise<boolean>;
+};
+
+export const MainView: React.FunctionComponent<Props> = (props: Props) => {
+    const { data, revalidate } = props;
+    const [pagination, setPagination] = React.useState<TablePaginationConfig>(
+        {}
+    );
+    const [filters, setFilters] = React.useState<
+        Record<string, FilterValue | null>
+    >({});
+    const [sorters, setSorters] = React.useState<SorterResult<AuctionRecord>>();
     const [watchingRecords, setWatchingRecords] = React.useState<number[]>([]);
     const [watchModalVisible, setWatchModalVisible] = React.useState<boolean>(
         false
     );
+    const [isValidating, setIsValidating] = React.useState(false);
 
-    const { data, error, revalidate, isValidating } = useSWR<AuctionResponse>(
-        "https://192.168.0.103:44358/api/Auctions",
-        getFetcher
-    );
+    const revalidateWrapper = async () => {
+        setIsValidating(true);
+        await revalidate();
+        setIsValidating(false);
+    };
 
     return (
         <>
@@ -22,8 +36,17 @@ export const MainView: React.FunctionComponent = () => {
                 setWatchingRecords={setWatchingRecords}
                 setWatchModalVisible={setWatchModalVisible}
                 auctions={data?.auctions}
-                revalidate={revalidate}
+                revalidate={revalidateWrapper}
                 isValidating={isValidating}
+                pagination={pagination}
+                filters={filters}
+                sorters={sorters}
+                clearFilters={() => setFilters({})}
+                onTableChange={(pagination, filters, sorters) => {
+                    setPagination(pagination);
+                    setFilters(filters);
+                    setSorters(sorters as SorterResult<AuctionRecord>);
+                }}
             />
             <Modal
                 visible={watchModalVisible}
