@@ -3,7 +3,7 @@ import React from "react";
 import { AuctionDataProvider, PageLayout } from "../components/layout";
 import { MainView } from "../components/views";
 
-export const App = () => {
+const App = () => {
     return (
         <PageLayout title="Fishing Simulator">
             <AuctionDataProvider>

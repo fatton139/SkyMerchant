@@ -3,7 +3,7 @@ import React from "react";
 import { AuctionDataProvider, PageLayout } from "../../components/layout";
 import { WatchView } from "../../components/views";
 
-export const Page = () => {
+const Page = () => {
     return (
         <PageLayout title="Fishing Simulator">
             <AuctionDataProvider>

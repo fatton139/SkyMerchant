@@ -1,7 +1,11 @@
 import { Menu } from "antd";
 import Link from "next/link";
 import React from "react";
-import { HomeOutlined, DatabaseOutlined } from "@ant-design/icons";
+import {
+    HomeOutlined,
+    DatabaseOutlined,
+    ProfileOutlined,
+} from "@ant-design/icons";
 
 type Link = {
     name: string;
@@ -18,6 +22,11 @@ const links: Link[] = [
     {
         name: "Watchlist",
         path: "/watchlist",
+        icon: <ProfileOutlined />,
+    },
+    {
+        name: "Item Database",
+        path: "/item-database",
         icon: <DatabaseOutlined />,
     },
 ];

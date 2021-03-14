@@ -1,7 +1,8 @@
-import { Layout, PageHeader } from "antd";
+import { Layout, PageHeader, Spin } from "antd";
 import { useRouter } from "next/router";
 import React, { PropsWithChildren } from "react";
 import styles from "../../styles/Layout.module.scss";
+import { useRouterTransition } from "../hooks";
 import { TagStatus } from "./ApiStatus";
 import { NavBreadcrumb } from "./NavBreadcrumb";
 import { NavMenu } from "./NavMenu";
@@ -14,6 +15,7 @@ export const BodyLayoutProvider: React.FunctionComponent<
     const router = useRouter();
 
     const [menuCollapsed, setMenuCollapsed] = React.useState<boolean>(false);
+    const isTransitioning = useRouterTransition();
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
@@ -38,7 +40,21 @@ export const BodyLayoutProvider: React.FunctionComponent<
                         padding: 24,
                     }}
                 >
-                    {props.children}
+                    {isTransitioning ? (
+                        <div
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Spin />
+                        </div>
+                    ) : (
+                        props.children
+                    )}
                 </Layout.Content>
                 <Layout.Footer>
                     <NavBreadcrumb currentPath={router.pathname} />
