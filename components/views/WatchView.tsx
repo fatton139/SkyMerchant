@@ -146,7 +146,7 @@ export const WatchView = () => {
             >
                 New Watchlist
             </Button>
-            <Divider orientation="left">Your watchlists</Divider>
+            <Divider orientation="left">Your Watchlists</Divider>
             <Collapse
                 expandIconPosition="right"
                 defaultActiveKey={[
