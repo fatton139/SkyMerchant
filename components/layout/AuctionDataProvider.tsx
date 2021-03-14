@@ -6,7 +6,7 @@ type Props = {
     children: (
         data: AuctionResponse | undefined,
         revlidate: () => Promise<boolean>,
-        isValidating: boolean,
+        isValidating: boolean
     ) => React.ReactNode;
 };
 
