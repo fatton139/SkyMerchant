@@ -7,8 +7,14 @@ const App = () => {
     return (
         <PageLayout title="Sky Merchant">
             <AuctionDataProvider>
-                {(data, revalidate) => {
-                    return <MainView data={data} revalidate={revalidate} />;
+                {(data, revalidate, isValidating) => {
+                    return (
+                        <MainView
+                            data={data}
+                            revalidate={revalidate}
+                            isValidating={isValidating}
+                        />
+                    );
                 }}
             </AuctionDataProvider>
         </PageLayout>

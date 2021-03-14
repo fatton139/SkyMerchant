@@ -225,7 +225,7 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                                 extra={settingsControl()}
                             >
                                 <Watchlist
-                                    isValidating={props.isValidating}
+                                    isValidating={isValidating}
                                     auctions={data?.auctions}
                                     revalidate={revalidate}
                                     id={key}

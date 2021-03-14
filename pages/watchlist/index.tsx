@@ -7,8 +7,14 @@ const Page = () => {
     return (
         <PageLayout title="Sky Merchant | Watchlist">
             <AuctionDataProvider>
-                {(data, revalidate) => {
-                    return <WatchView data={data} revalidate={revalidate} />;
+                {(data, revalidate, isValidating) => {
+                    return (
+                        <WatchView
+                            data={data}
+                            revalidate={revalidate}
+                            isValidating={isValidating}
+                        />
+                    );
                 }}
             </AuctionDataProvider>
         </PageLayout>
