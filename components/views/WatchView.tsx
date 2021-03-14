@@ -21,6 +21,7 @@ import {
 } from "../../interfaces";
 import { postFetcher } from "../../utils/fetcher";
 import { WatchlistSettingsModal, Watchlist } from "../table";
+import { updateWatchlistLocalstorage } from "../utils";
 
 enableMapSet();
 
@@ -35,6 +36,7 @@ export const WatchView = () => {
     );
 
     const [modalData, setModalData] = React.useState<string | undefined>();
+    const [activePanelKeys, setActivePanelKeys] = React.useState<string[]>([]);
 
     React.useEffect(() => {
         const persisted = ls.get("watchlists") as
@@ -51,8 +53,19 @@ export const WatchView = () => {
                     });
                 })
             );
+            const persistedActivePanels = ls.get("expandedwatchlists") as
+                | string[]
+                | undefined;
+            if (persistedActivePanels) {
+                setActivePanelKeys(
+                    persistedActivePanels.filter((k) =>
+                        Object.keys(persisted).includes(k)
+                    )
+                );
+            }
         }
     }, []);
+
     const insertWatchlist = () => {
         const key = uuidv4();
         const defaultName = "New watchlist";
@@ -64,23 +77,7 @@ export const WatchView = () => {
                 });
             })
         );
-        const existing = ls.get("watchlists") as
-            | PersistedWatchlists
-            | undefined;
-        if (existing) {
-            ls.set("watchlists", {
-                ...existing,
-                [key]: {
-                    name: defaultName,
-                },
-            });
-        } else {
-            ls.set("watchlists", {
-                [key]: {
-                    name: defaultName,
-                },
-            });
-        }
+        updateWatchlistLocalstorage(key, "name", defaultName);
         message.success("New watchlist has been added");
     };
 
@@ -93,8 +90,15 @@ export const WatchView = () => {
         const existing = ls.get("watchlists") as
             | PersistedWatchlists
             | undefined;
+        const name = existing?.[key].name;
         delete existing?.[key];
         ls.set("watchlists", existing);
+        const activePanels = (ls.get("expandedwatchlists") as string[]) || [];
+        ls.set(
+            "expandedwatchlists",
+            activePanels.filter((k) => Object.keys(existing || {}).includes(k))
+        );
+        message.success(`Successfully deleted ${name}`);
     };
 
     const settingsControl = React.useCallback(() => {
@@ -146,11 +150,14 @@ export const WatchView = () => {
             <Divider orientation="left">Your Watchlists</Divider>
             <Collapse
                 expandIconPosition="right"
-                defaultActiveKey={[
-                    ...((ls.get("expandedwatchlists") as any) || []),
-                ]}
+                activeKey={activePanelKeys}
                 onChange={(keys) => {
-                    ls.set("expandedwatchlists", keys);
+                    const active = typeof keys === "string" ? [keys] : keys;
+                    const filtered = active.filter((k) =>
+                        Array.from(watchlists.keys()).includes(k)
+                    );
+                    setActivePanelKeys(filtered);
+                    ls.set("expandedwatchlists", filtered);
                 }}
             >
                 {Array.from(watchlists.entries()).map(([key, value]) => {
