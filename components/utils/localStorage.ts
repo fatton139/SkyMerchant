@@ -14,6 +14,7 @@ export const updateWatchlistLocalstorage = <
         ls.set("watchlists", {
             ...existing,
             [key]: {
+                ...existing[key],
                 [objectKey]: value,
             },
         });

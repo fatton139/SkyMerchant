@@ -11,10 +11,12 @@ import { WatchTable } from ".";
 import * as ls from "local-storage";
 import { FilterValue, SorterResult } from "antd/lib/table/interface";
 import { DeleteRowOutlined, SettingOutlined } from "@ant-design/icons";
+import { updateWatchlistLocalstorage } from "../utils";
 
 type Props = {
     auctions: AuctionRecord[] | undefined;
     id: string;
+    alertIfAbovePrice?: number;
     revalidate: () => Promise<boolean>;
     deleteWatchlist: () => void;
     openSettingsModal: () => void;
@@ -90,27 +92,17 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                     setPagination(pagination);
                     setFilters(filters);
                     setSorters(sorters as SorterResult<AuctionRecord>);
-                    const existing = ls.get("watchlists") as
-                        | PersistedWatchlists
-                        | undefined;
-                    if (existing) {
-                        ls.set("watchlists", {
-                            ...existing,
-                            [id]: {
-                                pagination,
-                                filters,
-                                sorters,
-                            },
-                        });
-                    } else {
-                        ls.set("watchlists", {
-                            [id]: {
-                                pagination,
-                                filters,
-                                sorters,
-                            },
-                        });
-                    }
+                    updateWatchlistLocalstorage(
+                        props.id,
+                        "pagination",
+                        pagination
+                    );
+                    updateWatchlistLocalstorage(props.id, "filters", filters);
+                    updateWatchlistLocalstorage(
+                        props.id,
+                        "sorters",
+                        sorters as SorterResult<AuctionRecord>
+                    );
                 }}
             />
         </>

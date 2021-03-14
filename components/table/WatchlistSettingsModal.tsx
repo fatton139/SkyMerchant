@@ -72,7 +72,7 @@ export const WatchlistSettingsModal: React.FunctionComponent<Props> = (
                 >
                     <Input
                         type="number"
-                        value={currentData?.alertIfAbovePrice || ""}
+                        value={currentData?.alertIfAbovePrice ?? ""}
                         onChange={(e) => {
                             props.setWatchlists(
                                 updateWatchlistProp(

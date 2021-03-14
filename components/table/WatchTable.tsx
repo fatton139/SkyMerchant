@@ -438,7 +438,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                     rowClassName={(record) => {
                         if (
                             props.alertIfAbovePrice &&
-                            props.alertIfAbovePrice > record.bid
+                            record.bid > props.alertIfAbovePrice
                         ) {
                             return styles["row-alert"];
                         }

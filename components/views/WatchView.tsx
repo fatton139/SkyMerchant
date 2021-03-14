@@ -42,19 +42,17 @@ export const WatchView = () => {
             | undefined;
         if (persisted) {
             setWatchlists(
-                new Map(
-                    Object.keys(persisted).map((key) => [
-                        key,
-                        {
+                produce(watchlists, (draft) => {
+                    Object.keys(persisted).forEach((key) => {
+                        draft.set(key, {
                             name: persisted[key].name,
                             alertIfAbovePrice: persisted[key].alertIfAbovePrice,
-                        },
-                    ])
-                )
+                        });
+                    });
+                })
             );
         }
     }, []);
-
     const insertWatchlist = () => {
         const key = uuidv4();
         const defaultName = "New watchlist";
@@ -166,6 +164,7 @@ export const WatchView = () => {
                                 auctions={data?.auctions}
                                 revalidate={revalidate}
                                 id={key}
+                                alertIfAbovePrice={value.alertIfAbovePrice}
                                 deleteWatchlist={() => {
                                     deleteWatchlist(key);
                                 }}
