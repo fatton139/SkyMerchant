@@ -49,7 +49,7 @@ export const WatchView = () => {
         } else {
             ls.set("watchlists", { [key]: {} });
         }
-        message.success("New watchlist has been added")
+        message.success("New watchlist has been added");
     };
 
     const deleteWatchlist = (key: string) => {
@@ -67,7 +67,11 @@ export const WatchView = () => {
 
     return (
         <div>
-            <Button icon={<AppstoreAddOutlined />} onClick={insertWatchlist}>
+            <Button
+                type="primary"
+                icon={<AppstoreAddOutlined />}
+                onClick={insertWatchlist}
+            >
                 New Watchlist
             </Button>
             <Divider orientation="left">Your Watchlists</Divider>

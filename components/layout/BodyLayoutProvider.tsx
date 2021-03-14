@@ -1,7 +1,8 @@
-import { Layout } from "antd";
+import { Layout, PageHeader } from "antd";
 import { useRouter } from "next/router";
 import React, { PropsWithChildren } from "react";
 import styles from "../../styles/Layout.module.scss";
+import { TagStatus } from "./ApiStatus";
 import { NavBreadcrumb } from "./NavBreadcrumb";
 import { NavMenu } from "./NavMenu";
 
@@ -27,7 +28,11 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 <NavMenu currentPath={router.pathname} />
             </Layout.Sider>
             <Layout>
-                <Layout.Header className={styles.header}>Header</Layout.Header>
+                <PageHeader
+                    title="Sky Merchant"
+                    subTitle="Powered by DOTMA Sky Metchant API"
+                    tags={<TagStatus endpoint={"api/Auctions/healthcheck"} />}
+                />
                 <Layout.Content
                     style={{
                         padding: 24,
