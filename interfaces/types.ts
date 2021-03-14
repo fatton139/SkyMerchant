@@ -36,6 +36,7 @@ export type AuctionRecord = {
 export type WatchList = {
     name: string;
     alertIfAbovePrice: number | undefined;
+    dataAfterFilter: AuctionRecord[];
 };
 
 export type PersistedWatchlistData = WatchList & {

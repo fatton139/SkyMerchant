@@ -16,6 +16,7 @@ import React from "react";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
 import {
+    AuctionRecord,
     AuctionResponse,
     PersistedWatchlists,
     WatchList,
@@ -59,6 +60,7 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                         draft.set(key, {
                             name: persisted[key].name,
                             alertIfAbovePrice: persisted[key].alertIfAbovePrice,
+                            dataAfterFilter: [],
                         });
                     });
                 })
@@ -84,6 +86,7 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                 draft.set(key, {
                     name: defaultName,
                     alertIfAbovePrice: undefined,
+                    dataAfterFilter: [],
                 });
             })
         );
@@ -119,13 +122,24 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
         ls.set(LOCAL_STORAGE_ACTIVE_WATCHLIST_KEY, []);
     };
 
+    const setDataAfterFilter = (data: AuctionRecord[], key: string) => {
+        setWatchlists(
+            produce(watchlists, (draft) => {
+                const prev = draft.get(key);
+                if (prev) {
+                    draft.set(key, { ...prev, dataAfterFilter: data });
+                }
+            })
+        );
+    };
+
     const settingsControl = React.useCallback(() => {
         return <AppstoreAddOutlined />;
     }, []);
 
     const getMatchingRecords = React.useCallback((watchlist: WatchList) => {
         return watchlist.alertIfAbovePrice !== undefined
-            ? data?.auctions.filter((record) => {
+            ? watchlist.dataAfterFilter.filter((record) => {
                   return record.bid > watchlist.alertIfAbovePrice!;
               })
             : undefined;
@@ -227,6 +241,9 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                                     }}
                                     getMatchingRecords={() =>
                                         getMatchingRecords(value) || []
+                                    }
+                                    setDataAfterFilter={(data) =>
+                                        setDataAfterFilter(data, key)
                                     }
                                 />
                             </Collapse.Panel>

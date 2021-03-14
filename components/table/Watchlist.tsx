@@ -1,12 +1,12 @@
-import { Badge, Button, Popconfirm, TablePaginationConfig } from "antd";
-import React from "react";
-import { AuctionRecord, PersistedWatchlists } from "../../interfaces";
-import { WatchTable } from ".";
-import * as ls from "local-storage";
-import { FilterValue, SorterResult } from "antd/lib/table/interface";
 import { DeleteRowOutlined, SettingOutlined } from "@ant-design/icons";
-import { updateWatchlistLocalstorage } from "../utils";
+import { Badge, Button, Popconfirm, TablePaginationConfig } from "antd";
+import { FilterValue, SorterResult } from "antd/lib/table/interface";
+import * as ls from "local-storage";
+import React from "react";
+import { WatchTable } from ".";
+import { AuctionRecord, PersistedWatchlists } from "../../interfaces";
 import { LOCAL_STORAGE_WATCHLIST_KEY } from "../consts";
+import { updateWatchlistLocalstorage } from "../utils";
 
 type Props = {
     auctions: AuctionRecord[] | undefined;
@@ -16,6 +16,7 @@ type Props = {
     deleteWatchlist: () => void;
     openSettingsModal: () => void;
     getMatchingRecords: () => AuctionRecord[];
+    setDataAfterFilter: (data: AuctionRecord[]) => void;
 };
 
 export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
@@ -26,6 +27,7 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
         openSettingsModal,
         auctions,
         getMatchingRecords,
+        setDataAfterFilter,
         ...forwardProps
     } = props;
 
@@ -61,6 +63,11 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
         setSorters(persisted?.sorters);
     }, [persisted]);
 
+    const clearAllFilters = () => {
+        setFilters({});
+        updateWatchlistLocalstorage(props.id, "filters", {});
+    };
+
     return (
         <>
             <WatchTable
@@ -72,7 +79,9 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                     <>
                         <Button
                             icon={<SettingOutlined />}
-                            onClick={() => setShowOnlyMatching((prev) => !prev)}
+                            onClick={() => {
+                                setShowOnlyMatching((prev) => !prev);
+                            }}
                         >
                             {`Show ${showOnlyMatching ? "all" : "matched"}`}
                         </Button>
@@ -98,8 +107,8 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                 pagination={pagination}
                 filters={filters}
                 sorters={sorters}
-                clearFilters={() => setFilters({})}
-                onTableChange={(pagination, filters, sorters) => {
+                clearFilters={clearAllFilters}
+                onTableChange={(pagination, filters, sorters, extra) => {
                     setPagination(pagination);
                     setFilters(filters);
                     setSorters(sorters as SorterResult<AuctionRecord>);
@@ -115,6 +124,7 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                         sorters as SorterResult<AuctionRecord>
                     );
                 }}
+                setDataAfterFilter={setDataAfterFilter}
             />
         </>
     );

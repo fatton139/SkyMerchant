@@ -1,8 +1,8 @@
 import {
+    ClearOutlined,
     ClockCircleOutlined,
     ReloadOutlined,
     SearchOutlined,
-    ClearOutlined,
 } from "@ant-design/icons";
 import {
     Button,
@@ -16,14 +16,19 @@ import {
     Tag,
     Tooltip,
 } from "antd";
-import { FilterValue, SorterResult } from "antd/lib/table/interface";
+import { ColumnType } from "antd/es/table";
+import {
+    FilterValue,
+    SorterResult,
+    TableCurrentDataSource,
+} from "antd/lib/table/interface";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import React from "react";
-import Highlighter from "react-highlight-words";
 import ReactTimeAgo from "react-time-ago";
 import { AuctionRecord } from "../../interfaces";
 import styles from "../../styles/Table.module.scss";
+import { collectFilterStates, getFilterData } from "../utils/antd";
 
 TimeAgo.addLocale(en);
 
@@ -88,8 +93,10 @@ type Props = {
     onTableChange?: (
         pagination: TablePaginationConfig,
         filters: Record<string, FilterValue | null>,
-        sorter: SorterResult<AuctionRecord> | SorterResult<AuctionRecord>[]
+        sorter: SorterResult<AuctionRecord> | SorterResult<AuctionRecord>[],
+        extra: TableCurrentDataSource<AuctionRecord>
     ) => void;
+    setDataAfterFilter?: (data: AuctionRecord[]) => void;
 };
 
 export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
@@ -101,7 +108,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
     );
     const [showCountdown, setShowCountdown] = React.useState<boolean>(false);
 
-    const columns = React.useMemo(() => {
+    const columns: Array<ColumnType<AuctionRecord>> = React.useMemo(() => {
         return [
             {
                 title: "Type",
@@ -130,19 +137,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                 title: "Name",
                 dataIndex: "itemName",
                 key: "name",
-                render: (text: string) => (
-                    <a>
-                        <Highlighter
-                            autoEscape
-                            highlightStyle={{
-                                backgroundColor: "#ffc069",
-                                padding: 0,
-                            }}
-                            searchWords={[searchText]}
-                            textToHighlight={text}
-                        />
-                    </a>
-                ),
+                render: (text: string) => <a>{text}</a>,
                 sortOrder:
                     (props.sorters?.columnKey === "name" &&
                         props.sorters.order) ||
@@ -168,7 +163,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                     selectedKeys,
                     confirm,
                     clearFilters,
-                }: any) => (
+                }) => (
                     <div style={{ padding: 8 }}>
                         <Input
                             ref={(node) => {
@@ -183,7 +178,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                             }
                             onPressEnter={() => {
                                 confirm();
-                                setSearchText(selectedKeys[0]);
+                                setSearchText(selectedKeys[0]?.toString());
                             }}
                             style={{
                                 width: 188,
@@ -196,7 +191,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                                 type="primary"
                                 onClick={() => {
                                     confirm();
-                                    setSearchText(selectedKeys[0]);
+                                    setSearchText(selectedKeys[0]?.toString());
                                 }}
                                 icon={<SearchOutlined />}
                                 size="small"
@@ -206,7 +201,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                             </Button>
                             <Button
                                 onClick={() => {
-                                    clearFilters();
+                                    clearFilters?.();
                                     setSearchText("");
                                 }}
                                 size="small"
@@ -363,6 +358,16 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
         ];
     }, [searchText, showCountdown, props.filters]);
 
+    React.useEffect(() => {
+        if (props.auctions && props.setDataAfterFilter) {
+            const filtered = getFilterData<AuctionRecord>(
+                props.auctions,
+                collectFilterStates(columns, true)
+            );
+            props.setDataAfterFilter(filtered);
+        }
+    }, [columns, props.filters, props.auctions]);
+
     if (!props.auctions) {
         return <Skeleton active />;
     }
@@ -420,7 +425,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                         {props.additionalButtons}
                     </Space>
                 </Row>
-                <Table
+                <Table<AuctionRecord>
                     expandable={{
                         rowExpandable: () => true,
                         expandedRowRender: (record: AuctionRecord) => (
