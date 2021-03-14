@@ -1,7 +1,6 @@
 import {
     Badge,
     Button,
-    Divider,
     Popconfirm,
     TablePaginationConfig,
 } from "antd";
