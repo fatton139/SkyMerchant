@@ -1,9 +1,4 @@
-// You can include shared interfaces/types in a separate file
-// and then use them in any component by importing them. For
-// example, to import the interface below do:
-//
-// import { User } from 'path/to/interfaces';
-
+import { API_HOSTNAME } from "../components/consts";
 import { AuctionRecord } from "./types";
 
 type BaseResponse = {
@@ -16,3 +11,9 @@ export type AuctionResponse = BaseResponse & {
     totalPages: number;
     page: number;
 };
+
+export const AUCTION_ENDPOINT = new URL("/api/Auctions", API_HOSTNAME).href;
+export const HEALTH_CHECK_ENDPOINT = new URL(
+    "/api/Auctions/healthcheck",
+    API_HOSTNAME
+).href;

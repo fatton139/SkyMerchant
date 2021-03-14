@@ -1,6 +1,7 @@
 import { Layout, PageHeader, Spin } from "antd";
 import { useRouter } from "next/router";
 import React, { PropsWithChildren } from "react";
+import { HEALTH_CHECK_ENDPOINT } from "../../interfaces";
 import styles from "../../styles/Layout.module.scss";
 import { useRouterTransition } from "../hooks";
 import { TagStatus } from "./ApiStatus";
@@ -33,7 +34,7 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 <PageHeader
                     title="Sky Merchant"
                     subTitle="Powered by DOTMA Sky Metchant API"
-                    tags={<TagStatus endpoint={"api/Auctions/healthcheck"} />}
+                    tags={<TagStatus endpoint={HEALTH_CHECK_ENDPOINT} />}
                 />
                 <Layout.Content
                     style={{
