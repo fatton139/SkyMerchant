@@ -14,4 +14,4 @@ COPY . /usr/src/app
 RUN yarn build
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["yarn", "start"]
