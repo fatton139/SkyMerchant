@@ -29,7 +29,7 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 theme={props.darkMode ? "dark" : "light"}
             >
                 <div className={styles["logo-container"]}>
-                    <div className={styles.logo} />
+                    <img src="./logo.jpg" className={styles.logo} />
                 </div>
                 <NavMenu
                     currentPath={router.pathname}
