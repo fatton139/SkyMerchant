@@ -18,11 +18,6 @@ export const PageLayout = ({ children, title }: Props) => {
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"
                 />
-                <link
-                    rel="stylesheet"
-                    type="text/css"
-                    href={"/styles.scss"}
-                ></link>
             </Head>
             <ThemeProvider>
                 <main>

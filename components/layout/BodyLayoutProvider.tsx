@@ -18,13 +18,9 @@ export const BodyLayoutProvider: React.FunctionComponent<
 
     const [menuCollapsed, setMenuCollapsed] = React.useState<boolean>(false);
     const isTransitioning = useRouterTransition();
-    const { switcher, currentTheme, status } = useThemeSwitcher();
+    const { currentTheme } = useThemeSwitcher();
 
     const darkMode = currentTheme === "dark";
-
-    if (status === "loading") {
-        return <></>;
-    }
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
@@ -37,15 +33,7 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 <div className={styles["logo-container"]}>
                     <div className={styles.logo} />
                 </div>
-                <NavMenu
-                    currentPath={router.pathname}
-                    darkmode={darkMode}
-                    toggleDarkmode={() =>
-                        switcher({
-                            theme: currentTheme === "dark" ? "light" : "dark",
-                        })
-                    }
-                />
+                <NavMenu currentPath={router.pathname} darkmode={darkMode} />
             </Layout.Sider>
             <Layout>
                 <PageHeader
