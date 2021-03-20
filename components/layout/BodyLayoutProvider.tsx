@@ -27,6 +27,12 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 collapsed={menuCollapsed}
                 onCollapse={setMenuCollapsed}
                 theme={props.darkMode ? "dark" : "light"}
+                style={{
+                    overflow: "auto",
+                    height: "100vh",
+                    position: "fixed",
+                    left: 0,
+                }}
             >
                 <div className={styles["logo-container"]}>
                     <img src="./logo.jpg" className={styles.logo} />
@@ -36,10 +42,10 @@ export const BodyLayoutProvider: React.FunctionComponent<
                     darkmode={props.darkMode}
                 />
             </Layout.Sider>
-            <Layout>
+            <Layout style={{ marginLeft: 200 }}>
                 <PageHeader
                     title="Sky Merchant"
-                    subTitle="Powered by DOTMA Sky Metchant API"
+                    subTitle="Powered by DOTMA Sky Merchant API"
                     tags={<TagStatus endpoint={HEALTH_CHECK_ENDPOINT} />}
                 />
                 <Layout.Content

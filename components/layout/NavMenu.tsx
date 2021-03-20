@@ -5,6 +5,7 @@ import {
     HomeOutlined,
     ProfileOutlined,
     SettingOutlined,
+    VerifiedOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import SubMenu from "antd/lib/menu/SubMenu";
@@ -35,6 +36,11 @@ const links: Link[] = [
         name: "Item Database",
         path: "/item-database",
         icon: <DatabaseOutlined />,
+    },
+    {
+        name: "Support",
+        path: "/support",
+        icon: <VerifiedOutlined />,
     },
 ];
 
