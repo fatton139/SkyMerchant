@@ -217,7 +217,7 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                 title: "Bid",
                 dataIndex: "bid",
                 key: "bid",
-                render: (text: string) => <p style={{ margin: 0 }}>{text}</p>,
+                render: (text: number) => <p style={{ margin: 0 }}>{text.toLocaleString()}</p>,
                 sortOrder:
                     (props.sorters?.columnKey === "bid" &&
                         props.sorters.order) ||
