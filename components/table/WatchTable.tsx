@@ -86,6 +86,7 @@ type Props = {
     filters?: Record<string, FilterValue | null>;
     sorters?: SorterResult<AuctionRecord>;
     alertIfAbovePrice?: number;
+    darkMode?: boolean;
     setWatchingRecords?: (records: number[]) => void;
     setWatchModalVisible?: (value: boolean) => void;
     clearFilters: () => void;
@@ -217,7 +218,9 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                 title: "Bid",
                 dataIndex: "bid",
                 key: "bid",
-                render: (text: number) => <p style={{ margin: 0 }}>{text.toLocaleString()}</p>,
+                render: (text: number) => (
+                    <p style={{ margin: 0 }}>{text.toLocaleString()}</p>
+                ),
                 sortOrder:
                     (props.sorters?.columnKey === "bid" &&
                         props.sorters.order) ||
@@ -445,7 +448,9 @@ export const WatchTable: React.FunctionComponent<Props> = (props: Props) => {
                             props.alertIfAbovePrice &&
                             record.bid > props.alertIfAbovePrice
                         ) {
-                            return styles["row-alert"];
+                            return props.darkMode
+                                ? styles["row-alert-dark"]
+                                : styles["row-alert"];
                         }
                         return "";
                     }}

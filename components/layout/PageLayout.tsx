@@ -1,12 +1,12 @@
+import * as ls from "local-storage";
 import Head from "next/head";
-import React, { ReactNode } from "react";
+import React from "react";
+import { LOCAL_STORAGE_THEME } from "../consts";
 import { BodyLayoutProvider } from "./BodyLayoutProvider";
 import { ThemeProvider } from "./ThemeProvider";
-import * as ls from "local-storage";
-import { LOCAL_STORAGE_THEME } from "../consts";
 
 type Props = {
-    children?: ReactNode;
+    children: (darkMode: boolean) => React.ReactNode;
     title: string;
 };
 

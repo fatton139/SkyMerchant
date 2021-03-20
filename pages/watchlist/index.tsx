@@ -5,17 +5,22 @@ import { WatchView } from "../../components/views";
 const Page = () => {
     return (
         <PageLayout title="Sky Merchant | Watchlist">
-            <AuctionDataProvider>
-                {(data, revalidate, isValidating) => {
-                    return (
-                        <WatchView
-                            data={data}
-                            revalidate={revalidate}
-                            isValidating={isValidating}
-                        />
-                    );
-                }}
-            </AuctionDataProvider>
+            {(darkMode) => {
+                return (
+                    <AuctionDataProvider>
+                        {(data, revalidate, isValidating) => {
+                            return (
+                                <WatchView
+                                    data={data}
+                                    revalidate={revalidate}
+                                    isValidating={isValidating}
+                                    darkMode={darkMode}
+                                />
+                            );
+                        }}
+                    </AuctionDataProvider>
+                );
+            }}
         </PageLayout>
     );
 };

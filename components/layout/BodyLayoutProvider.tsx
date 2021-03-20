@@ -10,6 +10,7 @@ import { NavMenu } from "./NavMenu";
 
 type Props = {
     darkMode: boolean;
+    children: (darkMode: boolean) => React.ReactNode;
 };
 
 export const BodyLayoutProvider: React.FunctionComponent<
@@ -66,7 +67,7 @@ export const BodyLayoutProvider: React.FunctionComponent<
                             <Spin />
                         </div>
                     ) : (
-                        props.children
+                        props.children(props.darkMode)
                     )}
                 </Layout.Content>
                 <Layout.Footer>

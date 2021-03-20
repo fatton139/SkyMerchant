@@ -5,17 +5,22 @@ import { MainView } from "../components/views";
 const App = () => {
     return (
         <PageLayout title="Sky Merchant">
-            <AuctionDataProvider>
-                {(data, revalidate, isValidating) => {
-                    return (
-                        <MainView
-                            data={data}
-                            revalidate={revalidate}
-                            isValidating={isValidating}
-                        />
-                    );
-                }}
-            </AuctionDataProvider>
+            {(darkMode) => {
+                return () => {
+                    <AuctionDataProvider>
+                        {(data, revalidate, isValidating) => {
+                            return (
+                                <MainView
+                                    data={data}
+                                    revalidate={revalidate}
+                                    isValidating={isValidating}
+                                    darkMode={darkMode}
+                                />
+                            );
+                        }}
+                    </AuctionDataProvider>;
+                };
+            }}
         </PageLayout>
     );
 };

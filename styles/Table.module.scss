@@ -4,3 +4,10 @@
         background-color: #adffad !important;
     }
 }
+
+.row-alert-dark {
+    background-color: #0c3021 !important;
+    & > td {
+        background-color: #0c3021 !important;
+    }
+}

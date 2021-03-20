@@ -8,6 +8,7 @@ type Props = {
     data?: AuctionResponse;
     revalidate: () => Promise<boolean>;
     isValidating: boolean;
+    darkMode: boolean;
 };
 
 export const MainView: React.FunctionComponent<Props> = (props: Props) => {
@@ -48,6 +49,7 @@ export const MainView: React.FunctionComponent<Props> = (props: Props) => {
                     setFilters(filters);
                     setSorters(sorters as SorterResult<AuctionRecord>);
                 }}
+                darkMode={props.darkMode}
             />
             <Modal
                 visible={watchModalVisible}

@@ -18,6 +18,7 @@ type Props = {
     openSettingsModal: () => void;
     getMatchingRecords: () => AuctionRecord[];
     setDataAfterFilter: (data: AuctionRecord[]) => void;
+    darkMode: boolean
 };
 
 export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
@@ -126,6 +127,7 @@ export const Watchlist: React.FunctionComponent<Props> = (props: Props) => {
                     );
                 }}
                 setDataAfterFilter={setDataAfterFilter}
+                darkMode={props.darkMode}
             />
         </>
     );

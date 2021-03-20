@@ -5,7 +5,9 @@ import { SupportView } from "../../components/views";
 const App = () => {
     return (
         <PageLayout title="Sky Merchant | Support">
-            <SupportView />
+            {() => {
+                return <SupportView />;
+            }}
         </PageLayout>
     );
 };

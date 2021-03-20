@@ -33,6 +33,7 @@ type Props = {
     data?: AuctionResponse;
     revalidate: () => Promise<boolean>;
     isValidating: boolean;
+    darkMode: boolean;
 };
 
 export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
@@ -242,6 +243,7 @@ export const WatchView: React.FunctionComponent<Props> = (props: Props) => {
                                     setDataAfterFilter={(data) =>
                                         setDataAfterFilter(data, key)
                                     }
+                                    darkMode={props.darkMode}
                                 />
                             </Collapse.Panel>
                         );

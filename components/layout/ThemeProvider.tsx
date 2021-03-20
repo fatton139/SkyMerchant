@@ -6,16 +6,16 @@ type Props = {
 };
 
 const Component = {
-    a: dynamic(import("./DarkTheme")),
-    b: dynamic(import("./LightTheme")),
+    Dark: dynamic(import("./DarkTheme")),
+    Light: dynamic(import("./LightTheme")),
 };
 
 export const ThemeProvider: React.FunctionComponent<
     React.PropsWithChildren<Props>
 > = (props: React.PropsWithChildren<Props>) => {
     return props.darkMode ? (
-        <Component.a>{props.children}</Component.a>
+        <Component.Dark>{props.children}</Component.Dark>
     ) : (
-        <Component.b>{props.children}</Component.b>
+        <Component.Light>{props.children}</Component.Light>
     );
 };
