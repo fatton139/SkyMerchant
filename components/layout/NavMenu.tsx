@@ -6,11 +6,12 @@ import {
     ProfileOutlined,
     SettingOutlined,
 } from "@ant-design/icons";
-import { Menu, Popconfirm } from "antd";
+import { Menu } from "antd";
 import SubMenu from "antd/lib/menu/SubMenu";
-import Link from "next/link";
-import React from "react";
 import * as ls from "local-storage";
+import Link from "next/link";
+import Router from "next/router";
+import React from "react";
 import { LOCAL_STORAGE_THEME } from "../consts";
 
 type Link = {
@@ -59,9 +60,13 @@ export const NavMenu: React.FunctionComponent<Props> = (props: Props) => {
             <SubMenu icon={<SettingOutlined />} title="Settings">
                 <Menu.Item
                     icon={props.darkmode ? <BulbOutlined /> : <BulbFilled />}
-                    // onClick={() => {
-                    //     ls.set(LOCAL_STORAGE_THEME, props.darkmode);
-                    // }}
+                    onClick={() => {
+                        ls.set(
+                            LOCAL_STORAGE_THEME,
+                            props.darkmode ? "light" : "dark"
+                        );
+                        Router.reload();
+                    }}
                 >
                     {`Use ${props.darkmode ? "Lightmode" : "Darkmode"}`}
                 </Menu.Item>

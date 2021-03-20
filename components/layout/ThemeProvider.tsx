@@ -1,41 +1,21 @@
-import * as ls from "local-storage";
+import dynamic from "next/dynamic";
 import React from "react";
-import { ThemeSwitcherProvider } from "react-css-theme-switcher";
-import { LOCAL_STORAGE_THEME } from "../consts";
-const themes = {
-    light: "lightmode.css",
-    dark: "darkmode.css",
+
+type Props = {
+    darkMode: boolean;
 };
 
-type Props = {};
+const Component = {
+    a: dynamic(import("./DarkTheme")),
+    b: dynamic(import("./LightTheme")),
+};
 
 export const ThemeProvider: React.FunctionComponent<
     React.PropsWithChildren<Props>
 > = (props: React.PropsWithChildren<Props>) => {
-    const [defaultTheme, setDefaultTheme] = React.useState<"light" | "dark">(
-        "dark"
-    );
-
-    // React.useEffect(() => {
-    //     setTimeout(() => {
-    //         const lsTheme: "light" | "dark" | undefined = ls.get(
-    //             LOCAL_STORAGE_THEME
-    //         );
-    //         if (lsTheme) {
-    //             // setDefaultTheme(lsTheme);
-    //         } else {
-    //             setDefaultTheme(
-    //                 window.matchMedia("(prefers-color-scheme: dark)").matches
-    //                     ? "dark"
-    //                     : "light"
-    //             );
-    //         }
-    //     }, 0);
-    // }, []);
-
-    return (
-        <ThemeSwitcherProvider themeMap={themes} defaultTheme={defaultTheme}>
-            {props.children}
-        </ThemeSwitcherProvider>
+    return props.darkMode ? (
+        <Component.a>{props.children}</Component.a>
+    ) : (
+        <Component.b>{props.children}</Component.b>
     );
 };
