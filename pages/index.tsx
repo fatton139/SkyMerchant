@@ -6,7 +6,7 @@ const App = () => {
     return (
         <PageLayout title="Sky Merchant">
             {(darkMode) => {
-                return () => {
+                return (
                     <AuctionDataProvider>
                         {(data, revalidate, isValidating) => {
                             return (
@@ -18,8 +18,8 @@ const App = () => {
                                 />
                             );
                         }}
-                    </AuctionDataProvider>;
-                };
+                    </AuctionDataProvider>
+                );
             }}
         </PageLayout>
     );
