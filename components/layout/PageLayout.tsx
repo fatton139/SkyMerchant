@@ -1,16 +1,14 @@
 import Head from "next/head";
 import React, { ReactNode } from "react";
 import { BodyLayoutProvider } from "./BodyLayoutProvider";
+import { ThemeProvider } from "./ThemeProvider";
 
 type Props = {
     children?: ReactNode;
-    title?: string;
+    title: string;
 };
 
-export const PageLayout = ({
-    children,
-    title = "This is the default title",
-}: Props) => {
+export const PageLayout = ({ children, title }: Props) => {
     return (
         <>
             <Head>
@@ -20,10 +18,17 @@ export const PageLayout = ({
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"
                 />
+                <link
+                    rel="stylesheet"
+                    type="text/css"
+                    href={"/styles.scss"}
+                ></link>
             </Head>
-            <main>
-                <BodyLayoutProvider>{children}</BodyLayoutProvider>
-            </main>
+            <ThemeProvider>
+                <main>
+                    <BodyLayoutProvider>{children}</BodyLayoutProvider>
+                </main>
+            </ThemeProvider>
         </>
     );
 };

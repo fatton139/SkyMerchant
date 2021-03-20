@@ -1,4 +1,3 @@
-import "antd/dist/antd.css";
 import React from "react";
 import { PageLayout } from "../../components/layout";
 

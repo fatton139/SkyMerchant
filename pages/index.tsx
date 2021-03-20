@@ -1,4 +1,3 @@
-import "antd/dist/antd.css";
 import React from "react";
 import { AuctionDataProvider, PageLayout } from "../components/layout";
 import { MainView } from "../components/views";
