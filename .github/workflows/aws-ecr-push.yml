@@ -36,3 +36,7 @@ jobs:
                   IMAGE_TAG: latest
               run: |
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+            - name: Redeploy latest image on ECS
+              run: |
+                  aws ecs update-service --cluster skymerchant-cluster --service skymerchant-service --force-new-deployment
