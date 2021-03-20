@@ -1,16 +1,18 @@
 import Head from "next/head";
 import React, { ReactNode } from "react";
 import { BodyLayoutProvider } from "./BodyLayoutProvider";
+import { ThemeProvider } from "./ThemeProvider";
+import * as ls from "local-storage";
+import { LOCAL_STORAGE_THEME } from "../consts";
 
 type Props = {
     children?: ReactNode;
-    title?: string;
+    title: string;
 };
 
-export const PageLayout = ({
-    children,
-    title = "This is the default title",
-}: Props) => {
+export const PageLayout = ({ children, title }: Props) => {
+    const darkMode = ls.get(LOCAL_STORAGE_THEME) === "dark";
+
     return (
         <>
             <Head>
@@ -21,9 +23,11 @@ export const PageLayout = ({
                     content="initial-scale=1.0, width=device-width"
                 />
             </Head>
-            <main>
-                <BodyLayoutProvider>{children}</BodyLayoutProvider>
-            </main>
+            <ThemeProvider darkMode={darkMode}>
+                <BodyLayoutProvider darkMode={darkMode}>
+                    {children}
+                </BodyLayoutProvider>
+            </ThemeProvider>
         </>
     );
 };

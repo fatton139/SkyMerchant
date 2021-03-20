@@ -8,7 +8,9 @@ import { TagStatus } from "./ApiStatus";
 import { NavBreadcrumb } from "./NavBreadcrumb";
 import { NavMenu } from "./NavMenu";
 
-type Props = {};
+type Props = {
+    darkMode: boolean;
+};
 
 export const BodyLayoutProvider: React.FunctionComponent<
     PropsWithChildren<Props>
@@ -24,11 +26,15 @@ export const BodyLayoutProvider: React.FunctionComponent<
                 collapsible
                 collapsed={menuCollapsed}
                 onCollapse={setMenuCollapsed}
+                theme={props.darkMode ? "dark" : "light"}
             >
                 <div className={styles["logo-container"]}>
                     <div className={styles.logo} />
                 </div>
-                <NavMenu currentPath={router.pathname} />
+                <NavMenu
+                    currentPath={router.pathname}
+                    darkmode={props.darkMode}
+                />
             </Layout.Sider>
             <Layout>
                 <PageHeader
