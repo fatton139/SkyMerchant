@@ -40,7 +40,7 @@ export const SupportView: React.FunctionComponent = () => {
                     <Tag icon={<GithubOutlined />} color="gold">
                         <Typography.Link
                             copyable
-                            href="https://github.com/aXises/SkyMerchant"
+                            href="https://github.com/Assasindie/SkyblockMerchantAPI"
                             target="_blank"
                         >
                             API Repository
@@ -49,7 +49,7 @@ export const SupportView: React.FunctionComponent = () => {
                     <Tag icon={<GithubOutlined />} color="cyan">
                         <Typography.Link
                             copyable
-                            href="https://github.com/Assasindie/SkyblockMerchantAPI"
+                            href="https://github.com/aXises/SkyMerchant"
                             target="_blank"
                         >
                             Site Repository
